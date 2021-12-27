@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.skysam.hchirinos.diesan.ui.home.HomeFragment"
+        android:label="@string/menu_home"
+        tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/nav_lots"
+        android:name="com.skysam.hchirinos.diesan.ui.lots.LotsFragment"
+        android:label="@string/menu_lots"
+        tools:layout="@layout/fragment_lots" />
+
+    <fragment
+        android:id="@+id/nav_products"
+        android:name="com.skysam.hchirinos.diesan.ui.products.ProductsFragment"
+        android:label="@string/menu_products"
+        tools:layout="@layout/fragment_products" />
+</navigation>

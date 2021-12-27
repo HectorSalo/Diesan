@@ -1,0 +1,2 @@
+rootProject.name = "Diesan"
+include ':app'

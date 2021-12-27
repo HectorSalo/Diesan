@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_base_light">#EEFFFF</color>
+    <color name="blue_base_normal">#BBDEFB</color>
+    <color name="blue_base_dark">#8AACC8</color>
+    <color name="salmon_base_normal">#EF5350</color>
+    <color name="salmon_base_light">#FF867C</color>
+    <color name="salmon_base_dark">#B61827</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
