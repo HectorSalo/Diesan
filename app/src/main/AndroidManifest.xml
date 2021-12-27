@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Diesan">
         <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_settings" />
+        <activity
             android:name=".ui.stats.StatsActivity"
             android:exported="false"
             android:label="@string/title_activity_stats"
