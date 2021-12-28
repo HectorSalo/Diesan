@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Diesan</string>
+    <string name="title_activity_stock">Inventario</string>
+    <string name="title_activity_stats">Estadísticas</string>
+    <string name="title_activity_settings">Ajustes</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Distribuidora Diesan</string>
@@ -11,6 +14,17 @@
     <string name="menu_lots">Historial de Lotes</string>
     <string name="menu_products">Productos</string>
 
+    <!--Generals-->
+    <string name="text_list_empty">No hay ítems en esta lista</string>
+    <string name="text_save">Guardar</string>
+    <string name="text_delete">Eliminar</string>
+    <string name="text_update">Actualizar</string>
+    <string name="text_cancel">Cancelar</string>
+
+    <!--Products-->
+    <string name="text_product">Producto</string>
+    <string name="text_unit">Unidad</string>
+    <string name="title_add_producto_dialog">Crear producto</string>
 
     <!--Stock-->
     <string name="title_stock">Inventario</string>
@@ -29,11 +43,11 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="title_activity_stock">StockActivity</string>
-    <string name="title_activity_stats">StatsActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
 
-    <!-- Preference Titles -->
+    <!--Settings -->
+    <string name="text_about">Información de la App</string>
+    <string name="about_title">Desarrollado por&#8230;</string>
+    <string name="version_name">Versión %1$s</string>
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
 
@@ -47,4 +61,6 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

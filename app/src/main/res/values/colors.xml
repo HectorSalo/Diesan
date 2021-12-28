@@ -8,4 +8,6 @@
     <color name="salmon_base_dark">#B61827</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="color_about">#2C2B2B</color>
 </resources>
