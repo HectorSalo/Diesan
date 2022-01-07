@@ -34,7 +34,7 @@ class ProductAdapter(private var products: MutableList<Product>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = products[position]
         holder.name.text = item.name
-        holder.unit.text = item.unit
+        //holder.unit.text = item.quantity
     }
 
     override fun getItemCount(): Int = products.size

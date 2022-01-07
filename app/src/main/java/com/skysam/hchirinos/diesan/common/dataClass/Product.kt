@@ -6,6 +6,6 @@ package com.skysam.hchirinos.diesan.common.dataClass
 data class Product(
     val id: String,
     var name: String,
-    var unit: String,
-    var quantity: Double = 1.0
+    var price: Double = 1.0,
+    var quantity: Int = 1
 )

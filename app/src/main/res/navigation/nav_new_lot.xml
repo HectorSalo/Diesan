@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="com.skysam.hchirinos.diesan.ui.lots.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
+        android:name="com.skysam.hchirinos.diesan.ui.lots.AddNewLotFirstFragment"
+        android:label="@string/text_new_lot"
+        tools:layout="@layout/fragment_add_new_lot_first">
 
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
