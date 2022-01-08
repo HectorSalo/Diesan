@@ -3,14 +3,22 @@ package com.skysam.hchirinos.diesan.ui.lots
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.skysam.hchirinos.diesan.common.dataClass.Product
 
 class LotsViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is gallery Fragment"
+    private val _products = MutableLiveData<MutableList<Product>>().apply {
+        value = mutableListOf()
     }
-    val text: LiveData<String> = _text
+    val products: LiveData<MutableList<Product>> = _products
 
+    fun addProduct(product: Product) {
+        _products.value?.add(product)
+        _products.value = _products.value
+    }
+    fun removeProduct(product: Product) {
+        _products.value?.remove(product)
+        _products.value = _products.value
+    }
     private val _total = MutableLiveData<Double>().apply {
         value = 0.0
     }
