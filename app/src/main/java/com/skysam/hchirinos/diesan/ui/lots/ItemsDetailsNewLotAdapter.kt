@@ -13,7 +13,7 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 /**
  * Created by Hector Chirinos on 08/01/2022.
  */
-class ItemsDetailsNewLotAdapter(private val products: MutableList<Product>):
+class ItemsDetailsNewLotAdapter(private var products: MutableList<Product>):
     RecyclerView.Adapter<ItemsDetailsNewLotAdapter.ViewHolder>() {
     lateinit var context: Context
 
@@ -30,16 +30,14 @@ class ItemsDetailsNewLotAdapter(private val products: MutableList<Product>):
     override fun onBindViewHolder(holder: ItemsDetailsNewLotAdapter.ViewHolder, position: Int) {
         val item = products[position]
         holder.name.text = item.name
-        val total = (item.price + item.ship + item.tax) * item.quantity
         holder.total.text = context.getString(R.string.text_item_price,
-            Class.convertDoubleToString(total))
+            Class.convertDoubleToString(item.sumTotal))
         holder.price.text = context.getString(R.string.text_item_price,
-            Class.convertDoubleToString(total / item.quantity))
-        val priceToSell = ((total / item.quantity) * (item.percentageProfit / 100)) + (total / item.quantity)
+            Class.convertDoubleToString(item.priceByUnit))
         holder.amount.text = context.getString(R.string.text_item_price,
-            Class.convertDoubleToString(priceToSell))
+            Class.convertDoubleToString(item.priceToSell))
         holder.profit.text = context.getString(R.string.text_item_price,
-            Class.convertDoubleToString(priceToSell - (total / item.quantity)))
+            Class.convertDoubleToString(item.amountProfit))
     }
 
     override fun getItemCount(): Int = products.size

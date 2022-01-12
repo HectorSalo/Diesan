@@ -141,28 +141,31 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             binding.etQuantity.requestFocus()
             return
         }
-        val profit = binding.etProfit.text.toString()
-        if (profit.isEmpty()) {
+        val profitPercentage = binding.etProfit.text.toString()
+        if (profitPercentage.isEmpty()) {
             binding.tfProfit.error = getString(R.string.error_field_empty)
             binding.etProfit.requestFocus()
             return
         }
-        val profitD = profit.toDouble()
-        if (profitD <= 0) {
+        val profitPerD = profitPercentage.toDouble()
+        if (profitPerD <= 0) {
             binding.tfProfit.error = getString(R.string.error_price_zero)
             binding.etProfit.requestFocus()
             return
         }
+        var tax = binding.etTax.text.toString()
+        tax = tax.replace(".", "").replace(",", ".")
+
         val product = Product(
             Constants.ID,
             name,
             price.toDouble(),
             quantityInt,
             0.0,
+            tax.toDouble(),
             0.0,
             0.0,
-            0.0,
-            0.0,
+            profitPerD,
             0.0,
             0.0
         )
