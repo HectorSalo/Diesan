@@ -28,6 +28,8 @@
     <string name="error_price_zero">Debe ser mayor a cero</string>
     <string name="error_list_empty">Debe agregar al menos un ítem</string>
     <string name="text_price_init">0,00</string>
+    <string name="txt_error_permiso_lectura">Error de permisos de lectura</string>
+    <string name="error_image_notfound">Imagen/archivo no encontrado.</string>
 
     <!--Dialogs Common-->
     <string name="title_confirmation_dialog">Confirmar</string>

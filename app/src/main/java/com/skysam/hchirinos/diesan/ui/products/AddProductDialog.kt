@@ -1,10 +1,19 @@
 package com.skysam.hchirinos.diesan.ui.products
 
+import android.Manifest
+import android.app.Activity
 import android.app.Dialog
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import com.skysam.hchirinos.diesan.R
@@ -22,6 +31,20 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
     private lateinit var image: String
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            goGallery()
+        } else {
+            Toast.makeText(requireContext(), getString(R.string.txt_error_permiso_lectura), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private val requestIntentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            showImage(result.data!!)
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         _binding = DialogAddProductBinding.inflate(layoutInflater)
@@ -42,7 +65,7 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
         buttonPositive = dialog.getButton(DialogInterface.BUTTON_POSITIVE)
         buttonPositive.setOnClickListener { validateData() }
 
-        binding.ivImage.setOnClickListener { chooseImage() }
+        binding.ivImage.setOnClickListener { requestPermission() }
         return dialog
     }
 
@@ -78,7 +101,31 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
         dialog?.dismiss()
     }
 
-    private fun chooseImage() {
+    private fun requestPermission() {
+        if (checkPermission()) {
+            goGallery()
+            return
+        }
+        requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+    }
 
+    private fun checkPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun goGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        requestIntentLauncher.launch(intent)
+    }
+
+    private fun showImage(it: Intent) {
+        val url = it.dataString
+        val sizeImagePreview = resources.getDimensionPixelSize(R.dimen.size_image_dialog_add_product)
+        val bitmap = Class.reduceBitmap(url, sizeImagePreview, sizeImagePreview)
+
+        if (bitmap != null) {
+            binding.ivImage.setImageBitmap(bitmap)
+        }
     }
 }
