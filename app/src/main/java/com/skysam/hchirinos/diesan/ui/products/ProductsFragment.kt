@@ -37,7 +37,7 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener {
             adapter = adapterProduct
         }
         binding.fab.setOnClickListener {
-            val addProductDialog = AddProductDialog()
+            val addProductDialog = AddProductDialog(products)
             addProductDialog.show(requireActivity().supportFragmentManager, tag)
         }
     }

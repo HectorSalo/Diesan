@@ -3,18 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:checkable="true"
     android:layout_margin="8dp"
-    android:backgroundTint="?attr/colorButtonNormal"
     android:id="@+id/card">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="@dimen/size_image_item_product"
+            android:layout_height="@dimen/size_image_item_product"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tf_name"
+            android:src="@drawable/ic_add_a_photo_232"
+            android:contentDescription="@string/app_name" />
 
         <!-- Title, secondary and supporting text -->
         <TextView
@@ -24,15 +38,5 @@
             tools:text="@string/text_product"
             android:textAppearance="?attr/textAppearanceHeadline6"
             />
-        <TextView
-            android:id="@+id/tv_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/text_unit"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textColor="?android:attr/textColorSecondary"
-            />
-
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

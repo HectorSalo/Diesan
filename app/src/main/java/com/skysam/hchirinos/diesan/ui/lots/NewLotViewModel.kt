@@ -5,11 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 
-class LotsViewModel : ViewModel() {
+class NewLotViewModel : ViewModel() {
     private val _products = MutableLiveData<MutableList<Product>>().apply {
         value = mutableListOf()
     }
     val products: LiveData<MutableList<Product>> = _products
+
+    private val _ship = MutableLiveData<Double>().apply {
+        value = 0.00
+    }
+    val ship: LiveData<Double> = _ship
 
     fun addProduct(product: Product) {
         _products.value?.add(product)
@@ -30,5 +35,9 @@ class LotsViewModel : ViewModel() {
 
     fun restTotal(value: Double) {
         _total.value = _total.value!! - value
+    }
+
+    fun valueShip(value: Double) {
+        _ship.value = value
     }
 }

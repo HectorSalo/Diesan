@@ -29,12 +29,18 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/xml/root_preferences.xml" value="0.3546875" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/drawable/ic_delete_item_24.xml" value="0.20833333333333334" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/activity_new_lot.xml" value="0.1" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/dialog_add_product.xml" value="0.2028985507246377" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_add_new_lot_first.xml" value="0.16" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_add_new_lot_second.xml" value="0.18" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_first.xml" value="0.18" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_lots.xml" value="0.2028985507246377" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_products.xml" value="0.2028985507246377" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_lot.xml" value="0.2028985507246377" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_new_lot.xml" value="0.1" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_product_details_new_lot_item.xml" value="0.15" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_product_item.xml" value="0.2028985507246377" />
         <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_produtc_details_new_lot_item.xml" value="0.1" />
+        <entry key="..\:/Users/hchirinos/AndroidStudioProjects/Diesan/app/src/main/res/menu/main.xml" value="0.3546875" />
       </map>
     </option>
   </component>

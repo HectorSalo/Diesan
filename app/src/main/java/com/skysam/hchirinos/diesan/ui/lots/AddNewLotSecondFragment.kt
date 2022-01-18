@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Product
@@ -22,7 +23,7 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
 
     private var _binding: FragmentAddNewLotSecondBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LotsViewModel by activityViewModels()
+    private val viewModel: NewLotViewModel by activityViewModels()
     private val products = mutableListOf<Product>()
     private lateinit var adapterItems: ItemsDetailsNewLotAdapter
     private var dateSelected: Long = 0
@@ -66,6 +67,25 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
                 products.addAll(it)
             }
         })
+        viewModel.ship.observe(viewLifecycleOwner, {
+            if (_binding != null) {
+                binding.etShip.removeTextChangedListener(this)
+                binding.etShip.setText(Class.convertDoubleToString(it))
+                binding.etShip.setSelection(Class.convertDoubleToString(it).length)
+                binding.etShip.addTextChangedListener(this)
+
+                val costShipByItem = it / products.size
+                binding.etItemShip.setText(Class.convertDoubleToString(costShipByItem))
+
+                for (item in products) {
+                    item.sumTotal = (item.price + item.tax + it) * item.quantity
+                    item.priceByUnit = item.sumTotal / item.quantity
+                    item.priceToSell = (item.priceByUnit + item.percentageProfit) + item.priceByUnit
+                    item.amountProfit = item.priceToSell - item.priceByUnit
+                }
+                adapterItems.notifyItemRangeChanged(0, products.size)
+            }
+        })
     }
 
     private fun validateData() {
@@ -74,6 +94,7 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
 
         val numberLot = binding.etNumberLot.text.toString()
         if (numberLot.isEmpty()) {
+            Snackbar.make(binding.root, getString(R.string.error_field_empty), Snackbar.LENGTH_LONG).show()
             binding.etNumberLot.requestFocus()
             return
         }
@@ -126,24 +147,9 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
         var cadena = s.toString()
         cadena = cadena.replace(",", "").replace(".", "")
         val cantidad: Double = cadena.toDouble() / 100
-        cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
 
         if (s.toString() == binding.etShip.text.toString()) {
-            binding.etShip.removeTextChangedListener(this)
-            binding.etShip.setText(cadena)
-            binding.etShip.setSelection(cadena.length)
-            binding.etShip.addTextChangedListener(this)
-
-            val costShipByItem = cantidad / products.size
-            binding.etItemShip.setText(Class.convertDoubleToString(costShipByItem))
-
-            for (item in products) {
-                item.sumTotal = (item.price + item.tax + costShipByItem) * item.quantity
-                item.priceByUnit = item.sumTotal / item.quantity
-                item.priceToSell = (item.priceByUnit + item.percentageProfit) + item.priceByUnit
-                item.amountProfit = item.priceToSell - item.priceByUnit
-            }
-            adapterItems.notifyItemRangeChanged(0, products.size)
+            viewModel.valueShip(cantidad)
         }
     }
 }

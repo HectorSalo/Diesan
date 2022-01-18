@@ -37,6 +37,9 @@
     <string name="text_product">Producto</string>
     <string name="text_unit">Unidad</string>
     <string name="title_add_producto_dialog">Crear producto</string>
+    <string name="error_spinner_units_position">Debe seleccionar un tipo de unidad</string>
+    <string name="error_name_exists">Nombre existente</string>
+    <string name="text_progress_load_image">Cargando imagen %1$s %</string>
 
     <!--Stock-->
     <string name="title_stock">Inventario</string>
@@ -44,11 +47,13 @@
     <!--Lots-->
     <string name="text_new_lot">Nuevo Lote</string>
     <string name="text_number_lot">Número de lote</string>
+    <string name="text_number_lot_item">Lote # %1$s</string>
     <string name="text_price_by_unit">Precio unitario</string>
     <string name="text_quantity">Cantidad</string>
     <string name="text_tax">Impuesto</string>
     <string name="text_profit">Utilidad (%)</string>
     <string name="text_date">Fecha</string>
+    <string name="text_date_item">Fecha de compra: %1$s</string>
     <string name="text_ship">Costo envío ($)</string>
     <string name="text_ship_by_item">Costo envío por ítem ($)</string>
     <string name="text_totalize">Totalizar</string>

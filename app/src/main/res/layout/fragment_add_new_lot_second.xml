@@ -74,8 +74,7 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="@string/text_ship"
-            android:inputType="number"
-            android:text="@string/text_price_init" />
+            android:inputType="number"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout

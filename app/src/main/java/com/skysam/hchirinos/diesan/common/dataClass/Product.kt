@@ -14,6 +14,6 @@ data class Product(
     var priceByUnit: Double,
     var percentageProfit: Double,
     var priceToSell: Double,
-    var amountProfit: Double
-
+    var amountProfit: Double,
+    var image: String
 )

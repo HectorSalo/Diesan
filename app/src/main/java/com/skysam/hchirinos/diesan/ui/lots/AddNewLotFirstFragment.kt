@@ -28,7 +28,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
 
     private var _binding: FragmentAddNewLotFirstBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LotsViewModel by activityViewModels()
+    private val viewModel: NewLotViewModel by activityViewModels()
     private lateinit var adapterNewLot: ItemsNewLotAdapter
     private val products = mutableListOf<Product>()
     private lateinit var productToDelete: Product
@@ -167,7 +167,8 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             0.0,
             profitPerD,
             0.0,
-            0.0
+            0.0,
+            Constants.IMAGE
         )
         viewModel.addProduct(product)
         viewModel.addTotal(price.toDouble() * quantityInt)

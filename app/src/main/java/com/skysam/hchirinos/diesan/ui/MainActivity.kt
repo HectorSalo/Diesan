@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.diesan
+package com.skysam.hchirinos.diesan.ui
 
 import android.os.Bundle
 import com.google.android.material.navigation.NavigationView
@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

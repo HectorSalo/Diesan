@@ -4,8 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.dataClass.Product
@@ -20,7 +22,7 @@ class ProductAdapter(private var products: MutableList<Product>):
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
-        val unit: TextView = view.findViewById(R.id.tv_unit)
+        val image: ImageView = view.findViewById(R.id.iv_image)
         val card: MaterialCardView = view.findViewById(R.id.card)
     }
 
@@ -34,7 +36,11 @@ class ProductAdapter(private var products: MutableList<Product>):
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = products[position]
         holder.name.text = item.name
-        //holder.unit.text = item.quantity
+        Glide.with(context)
+            .load(item.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_add_a_photo_232)
+            .into(holder.image)
     }
 
     override fun getItemCount(): Int = products.size
