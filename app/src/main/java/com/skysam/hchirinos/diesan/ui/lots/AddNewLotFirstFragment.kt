@@ -168,7 +168,8 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             profitPerD,
             0.0,
             0.0,
-            Constants.IMAGE
+            Constants.IMAGE,
+            Constants.STATUS
         )
         viewModel.addProduct(product)
         viewModel.addTotal(price.toDouble() * quantityInt)

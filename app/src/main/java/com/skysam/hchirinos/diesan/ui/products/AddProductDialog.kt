@@ -6,9 +6,10 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,11 +17,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogAddProductBinding
+import com.skysam.hchirinos.diesan.ui.MainViewModel
 
 /**
  * Created by Hector Chirinos (Home) on 28/12/2021.
@@ -28,9 +31,11 @@ import com.skysam.hchirinos.diesan.databinding.DialogAddProductBinding
 class AddProductDialog(private val products: MutableList<Product>): DialogFragment() {
     private var _binding: DialogAddProductBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var buttonPositive: Button
     private lateinit var buttonNegative: Button
-    private lateinit var image: String
+    private var image: String? = null
+    private lateinit var name: String
 
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -69,9 +74,10 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
         return dialog
     }
 
+
     private fun validateData() {
         binding.tfName.error = null
-        val name = binding.etName.text.toString().trim()
+        name = binding.etName.text.toString().trim()
         if (name.isEmpty()) {
             binding.tfName.error = getString(R.string.error_field_empty)
             binding.etName.requestFocus()
@@ -85,20 +91,49 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
             }
         }
         Class.keyboardClose(binding.root)
+        buttonNegative.isEnabled = false
+        buttonPositive.isEnabled = false
+        binding.ivImage.setOnClickListener(null)
+        dialog?.setCancelable(false)
 
+        if (image != null) {
+            viewModel.uploadImage(Uri.parse(image)).observe(this.requireActivity()) {
+                if (_binding != null) {
+                    if (it.equals(getString(R.string.error_data))) {
+                        binding.progressBar.visibility = View.GONE
+                        binding.tvProgress.visibility = View.GONE
+                        buttonNegative.isEnabled = false
+                        buttonPositive.isEnabled = false
+                        binding.ivImage.setOnClickListener { requestPermission() }
+                        dialog?.setCancelable(true)
+                        Toast.makeText(requireContext(), getString(R.string.error_upload_image), Toast.LENGTH_LONG).show()
+                    } else {
+                        if (it.contains("https")) {
+                            image = it
+                            saveProduct()
+                        } else {
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.tvProgress.visibility = View.VISIBLE
+                            binding.tvProgress.text = getString(R.string.text_progress_load_image, it)
+                        }
+                    }
+                }
+            }
+        } else {
+            image = ""
+            saveProduct()
+        }
+    }
+
+    private fun saveProduct() {
         val product = Product(
             Constants.ID,
             name,
-            ship = 0.0,
-            tax = 0.0,
-            sumTotal = 0.0,
-            priceByUnit = 0.0,
-            percentageProfit = 0.0,
-            priceToSell = 0.0,
-            amountProfit = 0.0,
-            image = image
+            image = image!!,
+            status = Constants.STATUS
         )
-        dialog?.dismiss()
+        viewModel.saveProduct(product)
+        dismiss()
     }
 
     private fun requestPermission() {
@@ -120,12 +155,17 @@ class AddProductDialog(private val products: MutableList<Product>): DialogFragme
     }
 
     private fun showImage(it: Intent) {
-        val url = it.dataString
+        image = it.dataString!!
         val sizeImagePreview = resources.getDimensionPixelSize(R.dimen.size_image_dialog_add_product)
-        val bitmap = Class.reduceBitmap(url, sizeImagePreview, sizeImagePreview)
+        val bitmap = Class.reduceBitmap(image, sizeImagePreview, sizeImagePreview)
 
         if (bitmap != null) {
             binding.ivImage.setImageBitmap(bitmap)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

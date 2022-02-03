@@ -5,18 +5,23 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentProductsBinding
+import com.skysam.hchirinos.diesan.ui.MainViewModel
 import com.skysam.hchirinos.diesan.ui.settings.SettingsActivity
 
 class ProductsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private var _binding: FragmentProductsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: MainViewModel by activityViewModels()
     private lateinit var adapterProduct: ProductAdapter
     private var products: MutableList<Product> = mutableListOf()
     private lateinit var search: SearchView
+    private var positionEdit = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +44,46 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener {
         binding.fab.setOnClickListener {
             val addProductDialog = AddProductDialog(products)
             addProductDialog.show(requireActivity().supportFragmentManager, tag)
+        }
+
+        loadViewModel()
+    }
+
+    private fun loadViewModel() {
+        viewModel.product.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                if (it != null) {
+                    when (it.status) {
+                        Constants.ADDED -> {
+                            if (!products.contains(it)) {
+                                products.add(it)
+                                adapterProduct.notifyItemInserted(products.size - 1)
+                            }
+                        }
+                        Constants.MODIFIED -> {
+                            products[positionEdit] = it
+                            adapterProduct.notifyItemChanged(positionEdit)
+                        }
+                        Constants.REMOVED -> {
+                            val position = products.indexOf(it)
+                            adapterProduct.notifyItemRemoved(position)
+                            products.remove(it)
+                        }
+                    }
+                    if (products.isEmpty()) {
+                        binding.rvProducts.visibility = View.GONE
+                        binding.tvListEmpty.visibility = View.VISIBLE
+                    } else {
+                        binding.rvProducts.visibility = View.VISIBLE
+                        binding.tvListEmpty.visibility = View.GONE
+                    }
+                    binding.progressBar.visibility = View.GONE
+                } else {
+                    binding.rvProducts.visibility = View.GONE
+                    binding.tvListEmpty.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                }
+            }
         }
     }
 
