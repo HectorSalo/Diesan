@@ -7,4 +7,7 @@
     <dimen name="fab_margin">16dp</dimen>
 
     <dimen name="width_button_home">136dp</dimen>
+
+    <dimen name="size_image_dialog_add_product">240dp</dimen>
+    <dimen name="size_image_item_product">64dp</dimen>
 </resources>
