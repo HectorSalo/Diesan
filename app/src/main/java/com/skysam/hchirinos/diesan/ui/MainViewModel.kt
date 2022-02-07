@@ -11,7 +11,9 @@ import com.skysam.hchirinos.diesan.database.ProductRepository
 class MainViewModel : ViewModel() {
     val product: LiveData<Product?> = ProductRepository.getProducts().asLiveData()
 
-    private val _products = MutableLiveData<MutableList<Product>>()
+    private val _products = MutableLiveData<MutableList<Product>>().apply {
+        value = mutableListOf()
+    }
     val products: LiveData<MutableList<Product>> get() = _products
 
     fun uploadImage(uri: Uri): LiveData<String> {
@@ -29,13 +31,17 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun updateProductToList(product: Product) {
-        if (!_products.value!!.contains(product)) {
-            _products.value!!.add(product)
+    fun updateProductToList(product: Product, position: Int) {
+        if (_products.value!!.contains(product)) {
+            _products.value!![position] = product
             _products.value = _products.value
         }
     }
 
-
-
+    fun deleteProductFromList(product: Product) {
+        if (_products.value!!.contains(product)) {
+            _products.value!!.remove(product)
+            _products.value = _products.value
+        }
+    }
 }

@@ -58,32 +58,33 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener {
                             if (!products.contains(it)) {
                                 products.add(it)
                                 adapterProduct.notifyItemInserted(products.size - 1)
+                                viewModel.addProductToList(it)
                             }
                         }
                         Constants.MODIFIED -> {
                             products[positionEdit] = it
                             adapterProduct.notifyItemChanged(positionEdit)
+                            viewModel.updateProductToList(it, positionEdit)
                         }
                         Constants.REMOVED -> {
                             val position = products.indexOf(it)
                             adapterProduct.notifyItemRemoved(position)
                             products.remove(it)
+                            viewModel.deleteProductFromList(it)
                         }
                     }
-                    if (products.isEmpty()) {
-                        binding.rvProducts.visibility = View.GONE
-                        binding.tvListEmpty.visibility = View.VISIBLE
-                    } else {
-                        binding.rvProducts.visibility = View.VISIBLE
-                        binding.tvListEmpty.visibility = View.GONE
-                    }
-                    binding.progressBar.visibility = View.GONE
-                } else {
-                    binding.rvProducts.visibility = View.GONE
-                    binding.tvListEmpty.visibility = View.VISIBLE
-                    binding.progressBar.visibility = View.GONE
                 }
             }
+        }
+        viewModel.products.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.rvProducts.visibility = View.GONE
+                binding.tvListEmpty.visibility = View.VISIBLE
+            } else {
+                binding.rvProducts.visibility = View.VISIBLE
+                binding.tvListEmpty.visibility = View.GONE
+            }
+            binding.progressBar.visibility = View.GONE
         }
     }
 
