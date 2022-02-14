@@ -1,9 +1,9 @@
 package com.skysam.hchirinos.diesan.database
 
+import android.content.ContentValues
 import android.net.Uri
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.FirebaseFirestore
+import android.util.Log
+import com.google.firebase.firestore.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -15,6 +15,7 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.util.*
 
 /**
  * Created by Hector Chirinos on 18/01/2022.
@@ -41,10 +42,6 @@ object ProductRepository {
                             .downloadUrl.addOnSuccessListener {
                                 trySend(it.toString())
                             }
-                        /*trySend(
-                            getInstanceStorage().child(uri.lastPathSegment!!)
-                                .downloadUrl.toString()
-                        ).isSuccess*/
                     } else {
                         trySend(Diesan.Diesan.getContext().getString(R.string.error_data)).isSuccess
                     }
@@ -59,58 +56,60 @@ object ProductRepository {
 
     fun saveProduct(product: Product) {
         val data = hashMapOf(
-            Constants.NAME to product.name,
+            Constants.NAME to product.name.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            },
             Constants.IMAGE to product.image,
         )
         getInstanceFirestore().add(data)
     }
 
-    fun getProducts(): Flow<Product?> {
+    fun getProducts(): Flow<MutableList<Product>> {
         return callbackFlow {
             val request = getInstanceFirestore()
-                .addSnapshotListener { value, error ->
+                .orderBy(Constants.NAME, Query.Direction.ASCENDING)
+                .addSnapshotListener(MetadataChanges.INCLUDE) { value, error ->
                     if (error != null) {
+                        Log.w(ContentValues.TAG, "Listen failed.", error)
                         return@addSnapshotListener
                     }
 
-                    if (value!!.documentChanges.isEmpty()) {
-                        trySend(null)
-                        return@addSnapshotListener
+                    val products = mutableListOf<Product>()
+                    for (product in value!!) {
+                        val productNew = Product(
+                            product.id,
+                            product.getString(Constants.NAME)!!,
+                            image = product.getString(Constants.IMAGE)!!,
+                            status = Constants.ADDED
+                        )
+                        products.add(productNew)
                     }
-
-                    for (doc in value.documentChanges) {
-                        when (doc.type) {
-                            DocumentChange.Type.ADDED -> {
-                                val product = Product(
-                                    doc.document.id,
-                                    doc.document.getString(Constants.NAME)!!,
-                                    image = doc.document.getString(Constants.IMAGE)!!,
-                                    status = Constants.ADDED
-                                )
-                                trySend(product)
-                            }
-                            DocumentChange.Type.MODIFIED -> {
-                                val product = Product(
-                                    doc.document.id,
-                                    doc.document.getString(Constants.NAME)!!,
-                                    image = doc.document.getString(Constants.IMAGE)!!,
-                                    status = Constants.MODIFIED
-                                )
-                                trySend(product)
-                            }
-                            DocumentChange.Type.REMOVED -> {
-                                val product = Product(
-                                    doc.document.id,
-                                    doc.document.getString(Constants.NAME)!!,
-                                    image = doc.document.getString(Constants.IMAGE)!!,
-                                    status = Constants.REMOVED
-                                )
-                                trySend(product)
-                            }
-                        }
-                    }
+                    trySend(products)
                 }
             awaitClose { request.remove() }
+        }
+    }
+
+    fun updateProduct(product: Product) {
+        val data: Map<String, Any> = hashMapOf(
+            Constants.NAME to product.name.replaceFirstChar {
+                if (it.isLowerCase()) it.titlecase(
+                    Locale.getDefault()
+                ) else it.toString()
+            },
+            Constants.IMAGE to product.image,
+        )
+        getInstanceFirestore()
+            .document(product.id)
+            .update(data)
+    }
+
+    fun deleteProducts(products: MutableList<Product>) {
+        for (pro in products) {
+            getInstanceFirestore().document(pro.id)
+                .delete()
         }
     }
 }

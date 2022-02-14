@@ -18,10 +18,12 @@
     <string name="text_list_empty">No hay ítems en esta lista</string>
     <string name="text_save">Guardar</string>
     <string name="text_delete">Eliminar</string>
+    <string name="text_deleting">Eliminando&#8230;</string>
     <string name="text_update">Actualizar</string>
     <string name="text_cancel">Cancelar</string>
     <string name="text_exit">Salir</string>
     <string name="text_back">Atrás</string>
+    <string name="text_undo">Deshacer</string>
 
     <!--Messages-->
     <string name="error_field_empty">Campo vacío</string>
@@ -40,6 +42,7 @@
     <string name="text_product">Producto</string>
     <string name="text_unit">Unidad</string>
     <string name="title_add_producto_dialog">Crear producto</string>
+    <string name="title_edit_producto_dialog">Editar %1$s</string>
     <string name="error_spinner_units_position">Debe seleccionar un tipo de unidad</string>
     <string name="error_name_exists">Nombre existente</string>
     <string name="text_progress_load_image">Cargando imagen %1$s</string>

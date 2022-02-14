@@ -9,12 +9,10 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.database.ProductRepository
 
 class MainViewModel : ViewModel() {
-    val product: LiveData<Product?> = ProductRepository.getProducts().asLiveData()
+    val products: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
 
-    private val _products = MutableLiveData<MutableList<Product>>().apply {
-        value = mutableListOf()
-    }
-    val products: LiveData<MutableList<Product>> get() = _products
+    private val _productToEdit = MutableLiveData<Product>()
+    val productToEdit: LiveData<Product> get() = _productToEdit
 
     fun uploadImage(uri: Uri): LiveData<String> {
         return ProductRepository.uploadImage(uri).asLiveData()
@@ -24,24 +22,15 @@ class MainViewModel : ViewModel() {
         ProductRepository.saveProduct(product)
     }
 
-    fun addProductToList(product: Product) {
-        if (!_products.value!!.contains(product)) {
-            _products.value!!.add(product)
-            _products.value = _products.value
-        }
+    fun productToEdit(product: Product) {
+        _productToEdit.value = product
     }
 
-    fun updateProductToList(product: Product, position: Int) {
-        if (_products.value!!.contains(product)) {
-            _products.value!![position] = product
-            _products.value = _products.value
-        }
+    fun updateProduct(product: Product) {
+        ProductRepository.updateProduct(product)
     }
 
-    fun deleteProductFromList(product: Product) {
-        if (_products.value!!.contains(product)) {
-            _products.value!!.remove(product)
-            _products.value = _products.value
-        }
+    fun deleteProducts(products: MutableList<Product>) {
+        ProductRepository.deleteProducts(products)
     }
 }

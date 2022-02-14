@@ -6,4 +6,10 @@
         <item name="android:statusBarColor">?attr/colorOnPrimary</item>
     </style>
 
+    <style name="Widget.App.ActionMode" parent="Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">?attr/textAppearanceHeadline6</item>
+        <item name="subtitleTextStyle">?attr/textAppearanceSubtitle1</item>
+        <item name="background">@color/blue_base_normal</item>
+    </style>
+
 </resources>

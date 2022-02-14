@@ -15,10 +15,11 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 /**
  * Created by Hector Chirinos (Home) on 27/12/2021.
  */
-class ProductAdapter(private var products: MutableList<Product>):
+class ProductAdapter(private var products: MutableList<Product>, private val onClick: ProductOnClick):
     RecyclerView.Adapter<ProductAdapter.ViewHolder>() {
 
     private lateinit var context: Context
+    private var listToDeleted: MutableList<String> = mutableListOf()
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView = view.findViewById(R.id.tv_name)
@@ -41,7 +42,47 @@ class ProductAdapter(private var products: MutableList<Product>):
             .centerCrop()
             .placeholder(R.drawable.ic_add_a_photo_232)
             .into(holder.image)
+
+        holder.card.isChecked = listToDeleted.contains(item.id)
+
+        holder.card.setOnClickListener {
+            if (listToDeleted.isNotEmpty()) {
+                fillListToDelete(item.id)
+                holder.card.isChecked = !holder.card.isChecked
+                onClick.deleteProduct(position, item)
+            } else {
+                onClick.updateProduct(item)
+            }
+        }
+        holder.card.setOnLongClickListener {
+            holder.card.isChecked = !holder.card.isChecked
+            onClick.deleteProduct(position, item)
+            fillListToDelete(item.id)
+            true
+        }
     }
 
     override fun getItemCount(): Int = products.size
+
+    private fun fillListToDelete(id: String) {
+        if (listToDeleted.contains(id)) {
+            listToDeleted.remove(id)
+        } else {
+            listToDeleted.add(id)
+        }
+    }
+
+    fun clearListToDelete() {
+        for (pro in products) {
+            for (id in listToDeleted) {
+                if (pro.id == id) notifyItemChanged(products.indexOf(pro))
+            }
+        }
+        listToDeleted.clear()
+    }
+
+    fun updateList(newList: MutableList<Product>) {
+        products = newList
+        notifyDataSetChanged()
+    }
 }
