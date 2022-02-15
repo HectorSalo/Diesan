@@ -7,5 +7,5 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
  */
 interface ProductOnClick {
  fun updateProduct(product: Product)
- fun deleteProduct(position: Int, product: Product)
+ fun deleteProduct(product: Product)
 }

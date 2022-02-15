@@ -10,14 +10,10 @@ object Constants {
     const val PRODUCTS = "products"
     const val STOCK = "stock"
 
-    const val ADDED = "added"
-    const val MODIFIED = "modified"
-    const val REMOVED = "removed"
-
     const val ID = "id"
     const val NAME = "name"
     const val PRICE = "price"
-    const val QUANTITY = "quantiy"
+    const val QUANTITY = "quantity"
     const val SHIP = "ship"
     const val TAX = "tax"
     const val SUM_TOTAL = "sumTotal"
@@ -27,4 +23,7 @@ object Constants {
     const val AMOUNT_PROFIT = "amountProfit"
     const val IMAGE = "image"
     const val STATUS = "status"
+
+    const val DATE = "date"
+    const val NUMBER_LOT = "numberLot"
 }

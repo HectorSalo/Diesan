@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph2"
+    app:startDestination="@id/FragmentStock">
+
+    <fragment
+        android:id="@+id/FragmentStock"
+        android:name="com.skysam.hchirinos.diesan.ui.stock.StockFragment"
+        tools:layout="@layout/fragment_stock"/>
+    <fragment
+        android:id="@+id/Second2Fragment"
+        android:name="com.skysam.hchirinos.diesan.ui.stock.Second2Fragment"
+        tools:layout="@layout/fragment_second2">
+    </fragment>
+</navigation>

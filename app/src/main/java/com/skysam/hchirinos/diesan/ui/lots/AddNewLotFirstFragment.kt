@@ -2,14 +2,15 @@ package com.skysam.hchirinos.diesan.ui.lots
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.InputType
 import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -18,7 +19,6 @@ import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentAddNewLotFirstBinding
-import com.skysam.hchirinos.diesan.ui.common.DecimalInputFilter
 import com.skysam.hchirinos.diesan.ui.common.ExitDialog
 import com.skysam.hchirinos.diesan.ui.common.OnClickExit
 import java.util.*
@@ -31,7 +31,9 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
     private val viewModel: NewLotViewModel by activityViewModels()
     private lateinit var adapterNewLot: ItemsNewLotAdapter
     private val products = mutableListOf<Product>()
+    private val productsOlder = mutableListOf<Product>()
     private lateinit var productToDelete: Product
+    private var productSelected: Product? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,10 +55,21 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         binding.etQuantity.inputType = InputType.TYPE_CLASS_NUMBER
         binding.etPrice.inputType = InputType.TYPE_CLASS_NUMBER
         binding.etProfit.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        binding.etProfit.filters =
-            arrayOf<InputFilter>(DecimalInputFilter(3,2))
+        binding.etProfit.addTextChangedListener(this)
         binding.etPrice.addTextChangedListener(this)
         binding.etTax.addTextChangedListener(this)
+
+        binding.etProduct.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            Class.keyboardClose(binding.root)
+            val nameSelected = parent.getItemAtPosition(position)
+            for (pro in productsOlder) {
+                if (pro.name == nameSelected) productSelected = pro
+            }
+            binding.etPrice.setText(Class.convertDoubleToString(productSelected!!.price))
+            binding.etQuantity.setText(productSelected?.quantity.toString())
+            binding.etTax.setText(Class.convertDoubleToString(productSelected!!.tax))
+            binding.etProfit.setText(Class.convertDoubleToString(productSelected!!.percentageProfit))
+        }
 
         adapterNewLot = ItemsNewLotAdapter(products, this)
         binding.rvProducts.apply {
@@ -78,7 +91,22 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
     }
 
     private fun loadViewModel() {
-        viewModel.products.observe(viewLifecycleOwner, {
+        viewModel.productsOlder.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                if (it.isNotEmpty()) {
+                    productsOlder.clear()
+                    productsOlder.addAll(it)
+                    val listNamesProduct = mutableListOf<String>()
+                    for (prod in it) {
+                        listNamesProduct.add(prod.name)
+                    }
+                    val adapterAutocomplete = ArrayAdapter(requireContext(),
+                        R.layout.layout_list_autocomplete, listNamesProduct.sorted())
+                    binding.etProduct.setAdapter(adapterAutocomplete)
+                }
+            }
+        }
+        viewModel.products.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 if (it.isNotEmpty()) {
                     if (products.size > it.size) {
@@ -104,17 +132,20 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                     binding.rvProducts.visibility = View.INVISIBLE
                 }
             }
-        })
-        viewModel.total.observe(viewLifecycleOwner, {
-            binding.tvTotal.text = getString(R.string.text_total_dolar,
-                Class.convertDoubleToString(it))
-        })
+        }
+        viewModel.total.observe(viewLifecycleOwner) {
+            binding.tvTotal.text = getString(
+                R.string.text_total_dolar,
+                Class.convertDoubleToString(it)
+            )
+        }
     }
 
     private fun validateData() {
         binding.tfProduct.error = null
         binding.tfPrice.error = null
         binding.tfQuantity.error = null
+        binding.tfProfit.error = null
 
         val name = binding.etProduct.text.toString().trim()
         if (name.isEmpty()) {
@@ -141,7 +172,8 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             binding.etQuantity.requestFocus()
             return
         }
-        val profitPercentage = binding.etProfit.text.toString()
+        var profitPercentage = binding.etProfit.text.toString()
+        profitPercentage = profitPercentage.replace(".", "").replace(",", ".")
         if (profitPercentage.isEmpty()) {
             binding.tfProfit.error = getString(R.string.error_field_empty)
             binding.etProfit.requestFocus()
@@ -156,22 +188,47 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         var tax = binding.etTax.text.toString()
         tax = tax.replace(".", "").replace(",", ".")
 
-        val product = Product(
-            Constants.ID,
-            name,
-            price.toDouble(),
-            quantityInt,
-            0.0,
-            tax.toDouble(),
-            0.0,
-            0.0,
-            profitPerD,
-            0.0,
-            0.0,
-            Constants.IMAGE,
-            Constants.STATUS
-        )
-        viewModel.addProduct(product)
+        val productToSend: Product
+        if (productSelected != null) {
+            if (productSelected!!.name == name) {
+                productSelected!!.price = price.toDouble()
+                productSelected!!.quantity = quantityInt
+                productSelected!!.tax = tax.toDouble()
+                productSelected!!.percentageProfit = profitPerD
+                productToSend = productSelected!!
+            } else {
+                productToSend = Product(
+                    Constants.ID,
+                    name,
+                    price.toDouble(),
+                    quantityInt,
+                    0.0,
+                    tax.toDouble(),
+                    0.0,
+                    0.0,
+                    profitPerD,
+                    0.0,
+                    0.0,
+                    ""
+                )
+            }
+        } else {
+            productToSend = Product(
+                Constants.ID,
+                name,
+                price.toDouble(),
+                quantityInt,
+                0.0,
+                tax.toDouble(),
+                0.0,
+                0.0,
+                profitPerD,
+                0.0,
+                0.0,
+                ""
+            )
+        }
+        viewModel.addProduct(productToSend)
         viewModel.addTotal(price.toDouble() * quantityInt)
     }
 
@@ -206,20 +263,28 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
     override fun afterTextChanged(s: Editable?) {
         var cadena = s.toString()
         cadena = cadena.replace(",", "").replace(".", "")
-        val cantidad: Double = cadena.toDouble() / 100
-        cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
+        if (cadena.isNotEmpty()) {
+            val cantidad: Double = cadena.toDouble() / 100
+            cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
 
-        if (s.toString() == binding.etPrice.text.toString()) {
-            binding.etPrice.removeTextChangedListener(this)
-            binding.etPrice.setText(cadena)
-            binding.etPrice.setSelection(cadena.length)
-            binding.etPrice.addTextChangedListener(this)
-        }
-        if (s.toString() == binding.etTax.text.toString()) {
-            binding.etTax.removeTextChangedListener(this)
-            binding.etTax.setText(cadena)
-            binding.etTax.setSelection(cadena.length)
-            binding.etTax.addTextChangedListener(this)
+            if (s.toString() == binding.etPrice.text.toString()) {
+                binding.etPrice.removeTextChangedListener(this)
+                binding.etPrice.setText(cadena)
+                binding.etPrice.setSelection(cadena.length)
+                binding.etPrice.addTextChangedListener(this)
+            }
+            if (s.toString() == binding.etTax.text.toString()) {
+                binding.etTax.removeTextChangedListener(this)
+                binding.etTax.setText(cadena)
+                binding.etTax.setSelection(cadena.length)
+                binding.etTax.addTextChangedListener(this)
+            }
+            if (s.toString() == binding.etProfit.text.toString()) {
+                binding.etProfit.removeTextChangedListener(this)
+                binding.etProfit.setText(cadena)
+                binding.etProfit.setSelection(cadena.length)
+                binding.etProfit.addTextChangedListener(this)
+            }
         }
     }
 }

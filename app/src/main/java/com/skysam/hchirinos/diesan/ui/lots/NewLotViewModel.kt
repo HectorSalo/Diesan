@@ -3,9 +3,17 @@ package com.skysam.hchirinos.diesan.ui.lots
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
+import com.skysam.hchirinos.diesan.database.LotsRepository
+import com.skysam.hchirinos.diesan.database.ProductRepository
+import com.skysam.hchirinos.diesan.database.StockRepository
 
 class NewLotViewModel : ViewModel() {
+    val productsOlder: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
+    val lots: LiveData<MutableList<Lot>> = LotsRepository.getLots().asLiveData()
+
     private val _products = MutableLiveData<MutableList<Product>>().apply {
         value = mutableListOf()
     }
@@ -39,5 +47,18 @@ class NewLotViewModel : ViewModel() {
 
     fun valueShip(value: Double) {
         _ship.value = value
+    }
+
+    fun sendNewLot(lot: Lot, productsOlder: MutableList<Product>) {
+        for (pro in lot.products) {
+            var exists = false
+            for (prod in productsOlder) {
+                if (pro.id == prod.id) exists = true
+            }
+            if (exists) ProductRepository.updateProduct(pro)
+            else ProductRepository.saveProduct(pro)
+        }
+        LotsRepository.addLot(lot)
+        StockRepository.addLotToSock(lot)
     }
 }

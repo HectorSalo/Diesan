@@ -137,8 +137,7 @@ class AddProductDialog: DialogFragment() {
         val product = Product(
             Constants.ID,
             name,
-            image = image!!,
-            status = Constants.STATUS
+            image = image!!
         )
         viewModel.saveProduct(product)
         dismiss()

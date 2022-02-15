@@ -49,14 +49,14 @@ class ProductAdapter(private var products: MutableList<Product>, private val onC
             if (listToDeleted.isNotEmpty()) {
                 fillListToDelete(item.id)
                 holder.card.isChecked = !holder.card.isChecked
-                onClick.deleteProduct(position, item)
+                onClick.deleteProduct(item)
             } else {
                 onClick.updateProduct(item)
             }
         }
         holder.card.setOnLongClickListener {
             holder.card.isChecked = !holder.card.isChecked
-            onClick.deleteProduct(position, item)
+            onClick.deleteProduct(item)
             fillListToDelete(item.id)
             true
         }

@@ -9,11 +9,12 @@ import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.databinding.FragmentLotsBinding
+import com.skysam.hchirinos.diesan.ui.MainViewModel
 import com.skysam.hchirinos.diesan.ui.settings.SettingsActivity
 
-class LotsFragment : Fragment(), SearchView.OnQueryTextListener {
+class LotsFragment : Fragment(), SearchView.OnQueryTextListener, LotOnClick {
 
-    private val viewModel: NewLotViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
     private var _binding: FragmentLotsBinding? = null
     private val binding get() = _binding!!
     private lateinit var itemSearch: SearchView
@@ -32,18 +33,30 @@ class LotsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        lotsAdapter = LotsAdapter(lots)
+        lotsAdapter = LotsAdapter(lots, this)
         binding.rvLots.apply {
             setHasFixedSize(true)
             adapter = lotsAdapter
         }
-
         loadViewModel()
     }
 
     private fun loadViewModel() {
-
+        viewModel.lots.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                if (it.isNotEmpty()) {
+                    lots.clear()
+                    lots.addAll(it)
+                    lotsAdapter.notifyItemRangeInserted(0, lots.size)
+                    binding.rvLots.visibility = View.VISIBLE
+                    binding.tvListEmpty.visibility = View.GONE
+                } else {
+                    binding.rvLots.visibility = View.GONE
+                    binding.tvListEmpty.visibility = View.VISIBLE
+                }
+                binding.progressBar.visibility = View.GONE
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -71,5 +84,11 @@ class LotsFragment : Fragment(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
+    }
+
+    override fun viewLot(lot: Lot) {
+        viewModel.viewLot(lot)
+        val viewDetailsLotDialog = ViewDetailsLotDialog()
+        viewDetailsLotDialog.show(requireActivity().supportFragmentManager, tag)
     }
 }

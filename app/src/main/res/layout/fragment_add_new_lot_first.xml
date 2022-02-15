@@ -128,7 +128,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:digits="0123456789,"
-            android:inputType="number|numberDecimal"/>
+            android:inputType="number|numberDecimal"
+            android:maxLength="5"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

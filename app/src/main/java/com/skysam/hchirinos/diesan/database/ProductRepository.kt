@@ -61,7 +61,16 @@ object ProductRepository {
                     Locale.getDefault()
                 ) else it.toString()
             },
-            Constants.IMAGE to product.image,
+            Constants.PRICE to product.price,
+            Constants.QUANTITY to product.quantity,
+            Constants.SHIP to product.ship,
+            Constants.TAX to product.tax,
+            Constants.SUM_TOTAL to product.sumTotal,
+            Constants.PRICE_BY_UNIT to product.priceByUnit,
+            Constants.PERCENTAGE_PROFIT to product.percentageProfit,
+            Constants.PRICE_TO_SELL to product.priceToSell,
+            Constants.AMOUNT_PROFIT to product.amountProfit,
+            Constants.IMAGE to product.image
         )
         getInstanceFirestore().add(data)
     }
@@ -81,8 +90,16 @@ object ProductRepository {
                         val productNew = Product(
                             product.id,
                             product.getString(Constants.NAME)!!,
-                            image = product.getString(Constants.IMAGE)!!,
-                            status = Constants.ADDED
+                            product.getDouble(Constants.PRICE)!!,
+                            product.getDouble(Constants.QUANTITY)!!.toInt(),
+                            product.getDouble(Constants.SHIP)!!,
+                            product.getDouble(Constants.TAX)!!,
+                            product.getDouble(Constants.SUM_TOTAL)!!,
+                            product.getDouble(Constants.PRICE_BY_UNIT)!!,
+                            product.getDouble(Constants.PERCENTAGE_PROFIT)!!,
+                            product.getDouble(Constants.PRICE_TO_SELL)!!,
+                            product.getDouble(Constants.AMOUNT_PROFIT)!!,
+                            product.getString(Constants.IMAGE)!!
                         )
                         products.add(productNew)
                     }
@@ -99,7 +116,16 @@ object ProductRepository {
                     Locale.getDefault()
                 ) else it.toString()
             },
-            Constants.IMAGE to product.image,
+            Constants.PRICE to product.price,
+            Constants.QUANTITY to product.quantity,
+            Constants.SHIP to product.ship,
+            Constants.TAX to product.tax,
+            Constants.SUM_TOTAL to product.sumTotal,
+            Constants.PRICE_BY_UNIT to product.priceByUnit,
+            Constants.PERCENTAGE_PROFIT to product.percentageProfit,
+            Constants.PRICE_TO_SELL to product.priceToSell,
+            Constants.AMOUNT_PROFIT to product.amountProfit,
+            Constants.IMAGE to product.image
         )
         getInstanceFirestore()
             .document(product.id)

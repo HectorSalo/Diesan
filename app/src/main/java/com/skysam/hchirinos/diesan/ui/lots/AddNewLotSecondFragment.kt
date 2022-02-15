@@ -8,12 +8,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
+import com.skysam.hchirinos.diesan.common.Constants
+import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentAddNewLotSecondBinding
 import java.text.DateFormat
@@ -25,6 +28,8 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
     private val binding get() = _binding!!
     private val viewModel: NewLotViewModel by activityViewModels()
     private val products = mutableListOf<Product>()
+    private val productsOlder = mutableListOf<Product>()
+    private val lots = mutableListOf<Lot>()
     private lateinit var adapterItems: ItemsDetailsNewLotAdapter
     private var dateSelected: Long = 0
 
@@ -61,13 +66,31 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
     }
 
     private fun loadViewModels() {
-        viewModel.products.observe(viewLifecycleOwner, {
+        viewModel.lots.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                if (it.isNotEmpty()) {
+                    lots.clear()
+                    lots.addAll(it)
+                    val nextNumber = it[0].numberLot + 1
+                    binding.etNumberLot.setText(nextNumber.toString())
+                } else {
+                    binding.etNumberLot.setText("1")
+                }
+            }
+        }
+        viewModel.productsOlder.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                productsOlder.clear()
+                productsOlder.addAll(it)
+            }
+        }
+        viewModel.products.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 products.clear()
                 products.addAll(it)
             }
-        })
-        viewModel.ship.observe(viewLifecycleOwner, {
+        }
+        viewModel.ship.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 binding.etShip.removeTextChangedListener(this)
                 binding.etShip.setText(Class.convertDoubleToString(it))
@@ -85,7 +108,7 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
                 }
                 adapterItems.notifyItemRangeChanged(0, products.size)
             }
-        })
+        }
     }
 
     private fun validateData() {
@@ -104,6 +127,13 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
             binding.etNumberLot.requestFocus()
             return
         }
+        for (lot in lots) {
+            if (lot.numberLot == numberLotInt) {
+                binding.tfNumberLot.error = getString(R.string.error_number_exists)
+                binding.etNumberLot.requestFocus()
+                return
+            }
+        }
         var ship = binding.etShip.text.toString()
         if (ship == "0,00") {
             binding.tfShip.error = getString(R.string.error_price_zero)
@@ -112,6 +142,17 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
         }
         ship = ship.replace(".", "").replace(",", ".")
 
+        Class.keyboardClose(binding.root)
+        val newLot = Lot(
+            Constants.ID,
+            numberLotInt,
+            Date(dateSelected),
+            ship.toDouble(),
+            products
+        )
+        viewModel.sendNewLot(newLot, productsOlder)
+        Toast.makeText(requireContext(), getString(R.string.text_succes), Toast.LENGTH_SHORT).show()
+        requireActivity().finish()
     }
 
     private fun selecDate() {

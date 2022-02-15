@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.appcompat.widget.SearchView
@@ -161,6 +160,7 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, ProductOnCl
             adapterProduct.updateList(listSearch)
         } else {
             adapterProduct.updateList(products)
+            binding.lottieAnimationView.visibility = View.GONE
         }
         return false
     }
@@ -171,7 +171,8 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, ProductOnCl
         editProductDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
-    override fun deleteProduct(position: Int, product: Product) {
+    override fun deleteProduct(product: Product) {
+        val position = products.indexOf(product)
         if (!productsToDelete.contains(product)) {
             productsToDelete.add(product)
             positionsToDelete.add(position)
@@ -183,7 +184,6 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, ProductOnCl
             actionMode = (activity as AppCompatActivity).startSupportActionMode(callback)
         }
         if (productsToDelete.isEmpty()) {
-            adapterProduct.clearListToDelete()
             actionMode?.finish()
         }
         actionMode?.title = "Seleccionado ${productsToDelete.size}"
@@ -219,9 +219,16 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, ProductOnCl
                         Snackbar.LENGTH_INDEFINITE)
                         .setDuration(3500)
                         .setAction(getString(R.string.text_undo)) {
-                            for (i in listTempDelete) {
-                                products.add(i.position, i.product)
-                                adapterProduct.notifyItemInserted(i.position)
+                            if (listSearch.isEmpty()) {
+                                for (i in listTempDelete) {
+                                    products.add(i.position, i.product)
+                                    adapterProduct.notifyItemInserted(i.position)
+                                }
+                            } else {
+                                for (i in listTempDelete) {
+                                    listSearch.add(i.position, i.product)
+                                    adapterProduct.notifyItemInserted(i.position)
+                                }
                             }
                             listTempDelete.clear()
                         }
@@ -241,6 +248,7 @@ class ProductsFragment : Fragment(), SearchView.OnQueryTextListener, ProductOnCl
             search.onActionViewCollapsed()
             productsToDelete.clear()
             positionsToDelete.clear()
+            listSearch.clear()
             adapterProduct.clearListToDelete()
         }
     }

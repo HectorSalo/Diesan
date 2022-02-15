@@ -17,6 +17,7 @@
     <!--Generals-->
     <string name="text_list_empty">No hay ítems en esta lista</string>
     <string name="text_save">Guardar</string>
+    <string name="text_succes">Proceso exitoso</string>
     <string name="text_delete">Eliminar</string>
     <string name="text_deleting">Eliminando&#8230;</string>
     <string name="text_update">Actualizar</string>
@@ -50,6 +51,8 @@
 
     <!--Stock-->
     <string name="title_stock">Inventario</string>
+    <string name="text_items_remain">Ítems restantes: %1$s</string>
+    <string name="text_profit_remain">Ganancia restante($): %1$s</string>
 
     <!--Lots-->
     <string name="text_new_lot">Nuevo Lote</string>
@@ -64,7 +67,7 @@
     <string name="text_ship">Costo envío ($)</string>
     <string name="text_ship_by_item">Costo envío por ítem ($)</string>
     <string name="text_totalize">Totalizar</string>
-    <string name="text_item_unit">$ %1$s x %2$s unidades</string>
+    <string name="text_item_unit">$ %1$s x %2$s unidad(es)</string>
     <string name="text_item_price">$ %1$s</string>
     <string name="text_total_dolar">Total ($) %1$s</string>
     <string name="text_save_lot">Guardar Lote</string>
@@ -72,18 +75,10 @@
     <string name="text_price_by_unit_tota">Precio unitario total</string>
     <string name="text_amount_to_sell">Monto de venta</string>
     <string name="text_profit_by_unit">Ganancia unitaria</string>
+    <string name="error_number_exists">Número usado</string>
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>
-    <string name="title_activity_new_lot">NewLotActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_new_lot">Ne</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
     <!--Settings -->
     <string name="text_about">Información de la App</string>
@@ -102,7 +97,4 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 </resources>
