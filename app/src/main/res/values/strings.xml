@@ -13,6 +13,7 @@
     <string name="menu_home">Inicio</string>
     <string name="menu_lots">Historial de Lotes</string>
     <string name="menu_products">Productos</string>
+    <string name="menu_sales">Ventas</string>
 
     <!--Generals-->
     <string name="text_list_empty">No hay ítems en esta lista</string>
@@ -53,6 +54,9 @@
     <string name="title_stock">Inventario</string>
     <string name="text_items_remain">Ítems restantes: %1$s</string>
     <string name="text_profit_remain">Ganancia restante($): %1$s</string>
+    <string name="text_quantity_sell">Cantidad vendida</string>
+    <string name="text_quantity_remain">Cantidad restante</string>
+    <string name="title_share_dialog">Compartir con</string>
 
     <!--Lots-->
     <string name="text_new_lot">Nuevo Lote</string>
@@ -76,6 +80,13 @@
     <string name="text_amount_to_sell">Monto de venta</string>
     <string name="text_profit_by_unit">Ganancia unitaria</string>
     <string name="error_number_exists">Número usado</string>
+
+    <!--Sales-->
+    <string name="text_sell">Vender</string>
+    <string name="text_customer">Cliente</string>
+    <string name="text_date_sale_item">Fecha de venta: %1$s</string>
+    <string name="text_customer_sale_item">Cliente: %1$s</string>
+    <string name="title_select_quantity_dialog">Seleccionar cantidad</string>
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>

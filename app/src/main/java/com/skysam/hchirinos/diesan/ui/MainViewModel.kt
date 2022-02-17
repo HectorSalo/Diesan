@@ -7,12 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
+import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.database.LotsRepository
 import com.skysam.hchirinos.diesan.database.ProductRepository
+import com.skysam.hchirinos.diesan.database.SaleRespository
 
 class MainViewModel : ViewModel() {
     val lots: LiveData<MutableList<Lot>> = LotsRepository.getLots().asLiveData()
     val products: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
+    val sales: LiveData<MutableList<Sale>> = SaleRespository.getSales().asLiveData()
 
     private val _productToEdit = MutableLiveData<Product>()
     val productToEdit: LiveData<Product> get() = _productToEdit

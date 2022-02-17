@@ -2,16 +2,24 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph2"
+    android:id="@+id/nav_stock"
     app:startDestination="@id/FragmentStock">
 
     <fragment
         android:id="@+id/FragmentStock"
         android:name="com.skysam.hchirinos.diesan.ui.stock.StockFragment"
-        tools:layout="@layout/fragment_stock"/>
+        tools:layout="@layout/fragment_stock"
+        android:label="@string/title_stock">
+        <action
+            android:id="@+id/action_FragmentStock_to_addSaleFragment"
+            app:destination="@id/addSaleFragment" />
+    </fragment>
     <fragment
-        android:id="@+id/Second2Fragment"
-        android:name="com.skysam.hchirinos.diesan.ui.stock.Second2Fragment"
-        tools:layout="@layout/fragment_second2">
+        android:id="@+id/addSaleFragment"
+        android:name="com.skysam.hchirinos.diesan.ui.sales.AddSaleFragment"
+        tools:layout="@layout/fragment_add_sale" >
+        <action
+            android:id="@+id/action_addSaleFragment_to_FragmentStock"
+            app:destination="@id/FragmentStock" />
     </fragment>
 </navigation>

@@ -12,6 +12,7 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/drawable/ic_stock_72.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/drawable/side_nav_bar.xml" value="0.37083333333333335" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/activity_main.xml" value="0.213768115942029" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/activity_stock.xml" value="0.23177083333333334" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/app_bar_main.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/content_main.xml" value="0.28940217391304346" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/content_stock.xml" value="0.17604166666666668" />
@@ -21,18 +22,23 @@
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_about.xml" value="0.24427083333333333" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_add_new_lot_first.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_add_new_lot_second.xml" value="0.3061594202898551" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_add_sale.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_first2.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_first3.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_home.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_lots.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_products.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_sales.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_second2.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_second3.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/fragment_stock.xml" value="0.21467391304347827" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_details_stock.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_lot.xml" value="0.17135416666666667" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_new_lot.xml" value="0.17135416666666667" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_sale.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_item_stock.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_list_autocomplete.xml" value="0.3546875" />
+        <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_product_details_new_lot_item.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_product_item.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/layout_spinner.xml" value="0.3546875" />
         <entry key="..\:/Users/Chirinos/AndroidStudioProjects/Diesan/app/src/main/res/layout/nav_header_main.xml" value="0.3211050724637681" />

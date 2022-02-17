@@ -1,16 +1,20 @@
 package com.skysam.hchirinos.diesan.ui.stock
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
+import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
-import com.skysam.hchirinos.diesan.ui.lots.ViewDetailsLotDialog
 
 
 class StockFragment : Fragment(), StockOnClick {
@@ -50,6 +54,11 @@ class StockFragment : Fragment(), StockOnClick {
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        (requireActivity() as AppCompatActivity).supportActionBar?.show()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem) =
         when (item.itemId) {
             android.R.id.home -> {
@@ -83,15 +92,23 @@ class StockFragment : Fragment(), StockOnClick {
 
     override fun viewDetail(lot: Lot) {
         viewModel.viewLot(lot)
-        val viewDetailsLotDialog = ViewDetailsLotDialog()
-        viewDetailsLotDialog.show(requireActivity().supportFragmentManager, tag)
+        val viewDetailsStockDialog = ViewDetailsStockDialog()
+        viewDetailsStockDialog.show(requireActivity().supportFragmentManager, tag)
     }
 
     override fun sell(lot: Lot) {
-        TODO("Not yet implemented")
+        viewModel.lotToSell(lot)
+        findNavController().navigate(R.id.action_FragmentStock_to_addSaleFragment)
     }
 
     override fun share(lot: Lot) {
-        TODO("Not yet implemented")
+        val selection = StringBuilder()
+        for (item in lot.products) {
+            selection.append("\n").append("${item.name}: $${Class.convertDoubleToString(item.priceToSell)}")
+        }
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_TEXT, selection.toString())
+        startActivity(Intent.createChooser(intent, getString(R.string.title_share_dialog)))
     }
 }

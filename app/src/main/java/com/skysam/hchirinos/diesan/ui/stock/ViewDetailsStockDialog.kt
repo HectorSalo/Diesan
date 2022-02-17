@@ -1,4 +1,4 @@
-package com.skysam.hchirinos.diesan.ui.lots
+package com.skysam.hchirinos.diesan.ui.stock
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,16 +12,15 @@ import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogViewDetailLotBinding
-import com.skysam.hchirinos.diesan.ui.MainViewModel
 
 /**
- * Created by Hector Chirinos on 14/02/2022.
+ * Created by Hector Chirinos on 15/02/2022.
  */
-class ViewDetailsLotDialog: DialogFragment() {
+class ViewDetailsStockDialog: DialogFragment() {
     private var _binding: DialogViewDetailLotBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by activityViewModels()
-    private lateinit var adapterItems: ItemsDetailsNewLotAdapter
+    private val viewModel: StockViewModel by activityViewModels()
+    private lateinit var adapterItems: ItemDetailsStockAdapter
     private val products = mutableListOf<Product>()
     private lateinit var lot: Lot
 
@@ -49,7 +48,7 @@ class ViewDetailsLotDialog: DialogFragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        adapterItems = ItemsDetailsNewLotAdapter(products)
+        adapterItems = ItemDetailsStockAdapter(products)
         binding.rvProducts.apply {
             setHasFixedSize(true)
             adapter = adapterItems

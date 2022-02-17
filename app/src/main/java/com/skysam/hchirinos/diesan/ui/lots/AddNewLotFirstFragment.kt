@@ -108,23 +108,23 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         }
         viewModel.products.observe(viewLifecycleOwner) {
             if (_binding != null) {
+                if (products.size > it.size) {
+                    adapterNewLot.notifyItemRemoved(products.indexOf(productToDelete))
+                    products.clear()
+                    products.addAll(it)
+                }
+                if (products.size < it.size) {
+                    products.clear()
+                    products.addAll(it)
+                    adapterNewLot.notifyItemInserted(products.size - 1)
+                    binding.etProduct.setText("")
+                    binding.etPrice.setText(getString(R.string.text_price_init))
+                    binding.etQuantity.setText("")
+                    binding.etProfit.setText("")
+                    binding.etTax.setText(getString(R.string.text_price_init))
+                    binding.etProduct.requestFocus()
+                }
                 if (it.isNotEmpty()) {
-                    if (products.size > it.size) {
-                        adapterNewLot.notifyItemRemoved(products.indexOf(productToDelete))
-                        products.clear()
-                        products.addAll(it)
-                    }
-                    if (products.size < it.size) {
-                        products.clear()
-                        products.addAll(it)
-                        adapterNewLot.notifyItemInserted(products.size - 1)
-                        binding.etProduct.setText("")
-                        binding.etPrice.setText(getString(R.string.text_price_init))
-                        binding.etQuantity.setText("")
-                        binding.etProfit.setText("")
-                        binding.etTax.setText(getString(R.string.text_price_init))
-                        binding.etProduct.requestFocus()
-                    }
                     binding.tvListEmpty.visibility = View.GONE
                     binding.rvProducts.visibility = View.VISIBLE
                 } else {
