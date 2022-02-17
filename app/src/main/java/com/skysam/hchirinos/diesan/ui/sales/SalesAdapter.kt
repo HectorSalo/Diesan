@@ -14,7 +14,8 @@ import com.skysam.hchirinos.diesan.common.dataClass.Sale
 /**
  * Created by Hector Chirinos on 16/02/2022.
  */
-class SalesAdapter(private val sales: MutableList<Sale>): RecyclerView.Adapter<SalesAdapter.ViewHolder>() {
+class SalesAdapter(private val sales: MutableList<Sale>, private val onClick: SalesOnClick):
+ RecyclerView.Adapter<SalesAdapter.ViewHolder>() {
  lateinit var context: Context
 
  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SalesAdapter.ViewHolder {
@@ -37,7 +38,7 @@ class SalesAdapter(private val sales: MutableList<Sale>): RecyclerView.Adapter<S
    holder.customer.text = context.getString(R.string.text_customer_sale_item, item.customer)
   } else holder.customer.visibility = View.GONE
 
-  holder.card.setOnClickListener {  }
+  holder.card.setOnClickListener { onClick.viewDetail(item) }
  }
 
  override fun getItemCount(): Int = sales.size

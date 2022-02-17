@@ -6,10 +6,12 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.databinding.FragmentLotsBinding
 import com.skysam.hchirinos.diesan.ui.MainViewModel
+import com.skysam.hchirinos.diesan.ui.common.WrapContentLinearLayoutManager
 import com.skysam.hchirinos.diesan.ui.settings.SettingsActivity
 
 class LotsFragment : Fragment(), SearchView.OnQueryTextListener, LotOnClick {
@@ -20,6 +22,7 @@ class LotsFragment : Fragment(), SearchView.OnQueryTextListener, LotOnClick {
     private lateinit var itemSearch: SearchView
     private val lots = mutableListOf<Lot>()
     private lateinit var lotsAdapter: LotsAdapter
+    private lateinit var wrapContentLinearLayoutManager: WrapContentLinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,10 +36,13 @@ class LotsFragment : Fragment(), SearchView.OnQueryTextListener, LotOnClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        wrapContentLinearLayoutManager = WrapContentLinearLayoutManager(requireContext(),
+            RecyclerView.VERTICAL, false)
         lotsAdapter = LotsAdapter(lots, this)
         binding.rvLots.apply {
             setHasFixedSize(true)
             adapter = lotsAdapter
+            layoutManager = wrapContentLinearLayoutManager
         }
         loadViewModel()
     }

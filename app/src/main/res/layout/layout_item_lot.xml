@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:id="@+id/card">
+    android:id="@+id/card"
+    android:layout_margin="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"

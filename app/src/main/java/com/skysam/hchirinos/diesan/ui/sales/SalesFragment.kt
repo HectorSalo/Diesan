@@ -6,17 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.databinding.FragmentSalesBinding
 import com.skysam.hchirinos.diesan.ui.MainViewModel
+import com.skysam.hchirinos.diesan.ui.common.WrapContentLinearLayoutManager
 
 
-class SalesFragment : Fragment() {
+class SalesFragment : Fragment(), SalesOnClick {
     private var _binding: FragmentSalesBinding? = null
     private val binding get() = _binding!!
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var salesAdapter: SalesAdapter
     private val sales = mutableListOf<Sale>()
+    private lateinit var wrapContentLinearLayoutManager: WrapContentLinearLayoutManager
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +32,13 @@ class SalesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        salesAdapter = SalesAdapter(sales)
+        wrapContentLinearLayoutManager = WrapContentLinearLayoutManager(requireContext(),
+            RecyclerView.VERTICAL, false)
+        salesAdapter = SalesAdapter(sales, this)
         binding.rvSales.apply {
             setHasFixedSize(true)
             adapter = salesAdapter
+            layoutManager = wrapContentLinearLayoutManager
         }
         loadViewModel()
     }
@@ -58,5 +64,11 @@ class SalesFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
             }
         }
+    }
+    
+    override fun viewDetail(sale: Sale) {
+        viewModel.viewSale(sale)
+        val viewDetailsSaleDialog = ViewDetailsSaleDialog()
+        viewDetailsSaleDialog.show(requireActivity().supportFragmentManager, tag)
     }
 }

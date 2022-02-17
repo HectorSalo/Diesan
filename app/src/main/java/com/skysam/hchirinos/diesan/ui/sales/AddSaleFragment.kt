@@ -13,10 +13,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
+import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
+import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.databinding.FragmentAddSaleBinding
 import com.skysam.hchirinos.diesan.ui.common.ExitDialog
 import com.skysam.hchirinos.diesan.ui.common.OnClickExit
@@ -86,6 +89,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
 
         binding.etDate.setOnClickListener { selecDate() }
         binding.btnExit.setOnClickListener { getOut() }
+        binding.btnSale.setOnClickListener { validateData() }
 
         loadViewModel()
     }
@@ -154,6 +158,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     }
 
     override fun onClickExit() {
+        viewModel.clearNewSale()
         findNavController().navigate(R.id.action_addSaleFragment_to_FragmentStock)
     }
 
@@ -199,6 +204,44 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
 
         val dialog = builder.create()
         dialog.show()
+    }
+
+    private fun validateData() {
+        if (productsToSell.isEmpty()) {
+            Snackbar.make(binding.root, getString(R.string.error_list_empty), Snackbar.LENGTH_LONG).show()
+            binding.etProduct.requestFocus()
+            return
+        }
+        val customer = binding.etCustomer.text.toString().ifEmpty { "" }
+        val sale = Sale(
+            Constants.ID,
+            Date(dateSelected),
+            customer,
+            productsToSell
+        )
+        for (pro in productsToSell) {
+            var remove = false
+            var productRemove: Product? = null
+            for (prod in products) {
+                if (pro.id == prod.id) {
+                    prod.quantity = prod.quantity - pro.quantity
+                    if (prod.quantity == 0) {
+                        remove = true
+                        productRemove = prod
+                    }
+                }
+            }
+            if (remove) products.remove(productRemove)
+        }
+        val lot = Lot(
+            lotToSell.id,
+            lotToSell.numberLot,
+            lotToSell.date,
+            lotToSell.ship,
+            products
+        )
+        viewModel.saveSale(sale, lot)
+        findNavController().navigate(R.id.action_addSaleFragment_to_FragmentStock)
     }
 
     private fun selecDate() {

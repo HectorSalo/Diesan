@@ -87,6 +87,7 @@
     <string name="text_date_sale_item">Fecha de venta: %1$s</string>
     <string name="text_customer_sale_item">Cliente: %1$s</string>
     <string name="title_select_quantity_dialog">Seleccionar cantidad</string>
+    <string name="text_profit_total">Ganancia total</string>
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>

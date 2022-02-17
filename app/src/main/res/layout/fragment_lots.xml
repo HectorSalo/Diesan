@@ -46,8 +46,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/layout_item_lot"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
         android:visibility="gone"/>
 
     <com.airbnb.lottie.LottieAnimationView

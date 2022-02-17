@@ -78,4 +78,20 @@ object StockRepository {
    awaitClose { request.remove() }
   }
  }
+ 
+ fun updateStoock(lot: Lot) {
+  val data = hashMapOf(
+   Constants.NUMBER_LOT to lot.numberLot,
+   Constants.DATE to lot.date,
+   Constants.SHIP to lot.ship,
+   Constants.PRODUCTS to lot.products
+  )
+  getInstance().document(lot.id)
+   .update(data)
+ }
+ 
+ fun deleteStock(lot: Lot) {
+  getInstance().document(lot.id)
+   .delete()
+ }
 }

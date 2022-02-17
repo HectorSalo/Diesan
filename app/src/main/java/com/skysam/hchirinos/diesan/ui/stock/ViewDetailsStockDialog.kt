@@ -72,14 +72,14 @@ class ViewDetailsStockDialog: DialogFragment() {
                 lot = it
                 products.clear()
                 products.addAll(lot.products)
-                var totalProfit = 0.0
+                var total = 0.0
                 for (pro in products) {
-                    totalProfit += pro.amountProfit
+                    total += (pro.priceToSell * pro.quantity)
                 }
                 adapterItems.notifyItemRangeInserted(0, products.size)
                 binding.tvTotal.text = getString(
                     R.string.text_total_dolar,
-                    Class.convertDoubleToString(totalProfit)
+                    Class.convertDoubleToString(total)
                 )
             }
         }

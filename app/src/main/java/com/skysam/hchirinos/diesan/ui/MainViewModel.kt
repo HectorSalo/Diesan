@@ -22,6 +22,9 @@ class MainViewModel : ViewModel() {
 
     private val _lotToView = MutableLiveData<Lot>()
     val lotToView: LiveData<Lot> get() = _lotToView
+    
+    private val _saleToView = MutableLiveData<Sale>()
+    val saleToView: LiveData<Sale> get() = _saleToView
 
     fun uploadImage(uri: Uri): LiveData<String> {
         return ProductRepository.uploadImage(uri).asLiveData()
@@ -45,5 +48,9 @@ class MainViewModel : ViewModel() {
 
     fun viewLot(lot: Lot) {
         _lotToView.value = lot
+    }
+    
+    fun viewSale(sale: Sale) {
+        _saleToView.value = sale
     }
 }

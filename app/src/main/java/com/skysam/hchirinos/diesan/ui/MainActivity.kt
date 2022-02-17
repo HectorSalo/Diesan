@@ -1,6 +1,7 @@
 package com.skysam.hchirinos.diesan.ui
 
 import android.os.Bundle
+import android.widget.ImageView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -10,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.bumptech.glide.Glide
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.databinding.ActivityMainBinding
 
@@ -29,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
+        val view = navView.getHeaderView(0)
+        val ivUser = view.findViewById(R.id.imageView) as ImageView
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
         // Passing each menu ID as a set of Ids because each
@@ -41,6 +45,9 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+    
+        Glide.with(this).load(R.drawable.logo_diesan)
+            .circleCrop().into(ivUser)
     }
 
     override fun onSupportNavigateUp(): Boolean {

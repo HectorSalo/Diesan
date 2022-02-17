@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
+import com.skysam.hchirinos.diesan.ui.common.WrapContentLinearLayoutManager
 
 
 class StockFragment : Fragment(), StockOnClick {
@@ -22,6 +24,7 @@ class StockFragment : Fragment(), StockOnClick {
     private val binding get() = _binding!!
     private val viewModel: StockViewModel by activityViewModels()
     private lateinit var stockAdapter: StockAdapter
+    private lateinit var wrapContentLinearLayoutManager: WrapContentLinearLayoutManager
     private val lots = mutableListOf<Lot>()
 
     override fun onCreateView(
@@ -41,10 +44,13 @@ class StockFragment : Fragment(), StockOnClick {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        wrapContentLinearLayoutManager = WrapContentLinearLayoutManager(requireContext(),
+            RecyclerView.VERTICAL, false)
         stockAdapter = StockAdapter(lots, this)
         binding.rvStock.apply {
             setHasFixedSize(true)
             adapter = stockAdapter
+            layoutManager = wrapContentLinearLayoutManager
         }
         loadViewModel()
     }
