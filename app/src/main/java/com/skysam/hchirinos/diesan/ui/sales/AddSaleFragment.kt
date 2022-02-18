@@ -203,6 +203,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             }
 
         val dialog = builder.create()
+        dialog.setCancelable(true)
         dialog.show()
     }
 

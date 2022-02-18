@@ -198,7 +198,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 productToSend = productSelected!!
             } else {
                 productToSend = Product(
-                    Constants.ID,
+                    Date().time.toString(),
                     name,
                     price.toDouble(),
                     quantityInt,
@@ -214,7 +214,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             }
         } else {
             productToSend = Product(
-                Constants.ID,
+                Date().time.toString(),
                 name,
                 price.toDouble(),
                 quantityInt,
