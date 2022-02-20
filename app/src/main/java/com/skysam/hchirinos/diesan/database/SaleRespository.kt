@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
@@ -16,8 +17,14 @@ import kotlinx.coroutines.flow.callbackFlow
  * Created by Hector Chirinos on 16/02/2022.
  */
 object SaleRespository {
+ private val PATH_SALE = when(Class.getEnviroment()) {
+  Constants.DEMO -> Constants.SALE_DEMO
+  Constants.RELEASE -> Constants.SALE
+  else -> Constants.SALE
+ }
+ 
  private fun getInstance(): CollectionReference {
-  return FirebaseFirestore.getInstance().collection(Constants.SALE)
+  return FirebaseFirestore.getInstance().collection(PATH_SALE)
  }
 
  fun addSale(sale: Sale) {

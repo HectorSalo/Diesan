@@ -5,6 +5,7 @@ import android.util.Log
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
@@ -16,8 +17,14 @@ import kotlinx.coroutines.flow.callbackFlow
  * Created by Hector Chirinos on 14/02/2022.
  */
 object StockRepository {
+ private val PATH_STOCK = when(Class.getEnviroment()) {
+  Constants.DEMO -> Constants.STOCK_DEMO
+  Constants.RELEASE -> Constants.STOCK
+  else -> Constants.STOCK
+ }
+ 
  private fun getInstance(): CollectionReference {
-  return FirebaseFirestore.getInstance().collection(Constants.STOCK)
+  return FirebaseFirestore.getInstance().collection(PATH_STOCK)
  }
 
  fun addLotToSock(lot: Lot) {

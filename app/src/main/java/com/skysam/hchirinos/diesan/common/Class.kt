@@ -7,6 +7,8 @@ import android.net.Uri
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.skysam.hchirinos.diesan.BuildConfig
+
 import com.skysam.hchirinos.diesan.R
 import java.io.FileNotFoundException
 import java.text.DateFormat
@@ -61,5 +63,9 @@ object Class {
             Toast.makeText(Diesan.Diesan.getContext(), R.string.error_image_notfound, Toast.LENGTH_SHORT).show()
             null
         }
+    }
+    
+    fun getEnviroment(): String {
+        return BuildConfig.BUILD_TYPE
     }
 }

@@ -21,14 +21,24 @@ import java.util.*
  * Created by Hector Chirinos on 18/01/2022.
  */
 object ProductRepository {
-    private const val PATH = "${Constants.PRODUCTS}/"
+    private val PATH_PRODUCTS_STORAGE = when(Class.getEnviroment()) {
+        Constants.DEMO -> "${Constants.PRODUCTS_DEMO}/"
+        Constants.RELEASE -> "${Constants.PRODUCTS}/"
+        else -> "${Constants.PRODUCTS}/"
+    }
+    
+    private val PATH_PRODUCTS = when(Class.getEnviroment()) {
+        Constants.DEMO -> Constants.PRODUCTS_DEMO
+        Constants.RELEASE -> Constants.PRODUCTS
+        else -> Constants.PRODUCTS
+    }
 
     private fun getInstanceStorage(): StorageReference {
-        return Firebase.storage.reference.child(PATH)
+        return Firebase.storage.reference.child(PATH_PRODUCTS_STORAGE)
     }
 
     private fun getInstanceFirestore(): CollectionReference {
-        return FirebaseFirestore.getInstance().collection(Constants.PRODUCTS)
+        return FirebaseFirestore.getInstance().collection(PATH_PRODUCTS)
     }
 
     fun uploadImage(uri: Uri): Flow<String> {
@@ -52,6 +62,11 @@ object ProductRepository {
                 }
             awaitClose {  }
         }
+    }
+    
+    fun deleteImage(image: String) {
+        val ref: StorageReference = Firebase.storage.getReferenceFromUrl(image)
+        ref.delete()
     }
 
     fun saveProduct(product: Product) {

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.bumptech.glide.Glide
 import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity() {
     
         Glide.with(this).load(R.drawable.logo_diesan)
             .circleCrop().into(ivUser)
+        
+        Class.getEnviroment()
     }
 
     override fun onSupportNavigateUp(): Boolean {

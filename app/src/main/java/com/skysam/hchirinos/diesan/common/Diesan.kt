@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.asLiveData
 import com.skysam.hchirinos.diesan.database.PreferencesRepository
+import com.skysam.hchirinos.diesan.notification.CloudMessaging
 
 /**
  * Created by Hector Chirinos (Home) on 27/12/2021.
@@ -29,6 +30,10 @@ class Diesan: Application() {
                     AppCompatDelegate.MODE_NIGHT_NO
                 )
             }
+        }
+        PreferencesRepository.getNotificationStatus().asLiveData().observeForever {
+            if (it) CloudMessaging.subscribeToTopicUpdateApp()
+            else CloudMessaging.unsubscribeToTopicUpdateApp()
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import androidx.preference.SwitchPreferenceCompat
 import com.skysam.hchirinos.diesan.BuildConfig
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Constants
@@ -22,7 +23,9 @@ class SettingsFragment: PreferenceFragmentCompat() {
     
     private val viewModel: SettingsViewModel by activityViewModels()
     private lateinit var listTheme: ListPreference
+    private lateinit var switchNotification: SwitchPreferenceCompat
     private lateinit var currentTheme: String
+    private var statusNotification = true
     
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -33,6 +36,7 @@ class SettingsFragment: PreferenceFragmentCompat() {
         super.onViewCreated(view, savedInstanceState)
         
         listTheme = findPreference(Constants.PREFERENCE_THEME)!!
+        switchNotification = findPreference(getString(R.string.notification_key))!!
     
         listTheme.setOnPreferenceChangeListener { _, newValue ->
             val themeSelected = newValue as String
@@ -44,6 +48,14 @@ class SettingsFragment: PreferenceFragmentCompat() {
                     requireActivity().startActivity(intent)
                     requireActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
+            }
+            true
+        }
+    
+        switchNotification.setOnPreferenceChangeListener { _, newValue ->
+            val isOn = newValue as Boolean
+            lifecycleScope.launch {
+                viewModel.changeNotificationStatus(isOn)
             }
             true
         }
@@ -76,6 +88,12 @@ class SettingsFragment: PreferenceFragmentCompat() {
                 Constants.PREFERENCE_THEME_DARK -> listTheme.value = Constants.PREFERENCE_THEME_DARK
                 Constants.PREFERENCE_THEME_LIGHT -> listTheme.value = Constants.PREFERENCE_THEME_LIGHT
             }
+        }
+        viewModel.notificationActive.observe(viewLifecycleOwner) {
+            statusNotification = it
+            switchNotification.isChecked = it
+            val icon = if (it) R.drawable.ic_notifications_active_24 else R.drawable.ic_notifications_off_24
+            switchNotification.setIcon(icon)
         }
     }
 }

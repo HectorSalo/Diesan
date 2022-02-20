@@ -14,6 +14,24 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/notification_header">
+
+        <SwitchPreferenceCompat
+            app:key="@string/notification_key"
+            app:title="@string/notification_title"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:dependency="@string/notification_key"
+            app:key="@string/notification_updates_key"
+            app:summaryOff="@string/notification_summary_off"
+            app:summaryOn="@string/notification_updates_summary_on"
+            app:title="@string/notification_updates_title"
+            app:defaultValue="true"
+            app:isPreferenceVisible="false"/>
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="@string/text_about">
 
         <PreferenceScreen

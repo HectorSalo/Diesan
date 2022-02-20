@@ -131,6 +131,7 @@ class EditProductDialog: DialogFragment() {
                         Toast.makeText(requireContext(), getString(R.string.error_upload_image), Toast.LENGTH_LONG).show()
                     } else {
                         if (it.contains("https")) {
+                            if (product.image.isNotEmpty()) viewModel.deleteOldImage(product.image)
                             image = it
                             updateProduct()
                         } else {

@@ -18,6 +18,7 @@ class MainViewModel : ViewModel() {
     val products: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SaleRespository.getSales().asLiveData()
     val theme: LiveData<String> = PreferencesRepository.getThemeSaved().asLiveData()
+    val notificationActive: LiveData<Boolean> = PreferencesRepository.getNotificationStatus().asLiveData()
 
     private val _productToEdit = MutableLiveData<Product>()
     val productToEdit: LiveData<Product> get() = _productToEdit
@@ -30,6 +31,10 @@ class MainViewModel : ViewModel() {
 
     fun uploadImage(uri: Uri): LiveData<String> {
         return ProductRepository.uploadImage(uri).asLiveData()
+    }
+    
+    fun deleteOldImage(image: String) {
+        ProductRepository.deleteImage(image)
     }
 
     fun saveProduct(product: Product) {

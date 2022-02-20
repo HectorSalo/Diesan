@@ -98,4 +98,16 @@
     <string name="version_name">Versión %1$s</string>
     <string name="text_personal_header">Personal</string>
     <string name="text_theme">Tema</string>
+
+    <!-- Notification Preferences -->
+    <string name="notification_key">notification</string>
+    <string name="notification_updates_key">notificationUpdate</string>
+    <string name="notification_header">Notificaciones</string>
+    <string name="notification_title">Notificaciones activas</string>
+
+    <string name="notification_updates_title">Actualizaciones</string>
+    <string name="notification_sale_paid_title">Pago de Facturas</string>
+    <string name="notification_note_sale_paid_title">Pago de Nota de Ventas</string>
+    <string name="notification_updates_summary_on">Notificar cuándo exista una nueva versión de la App</string>
+    <string name="notification_summary_off">Desactivado</string>
 </resources>
