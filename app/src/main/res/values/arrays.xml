@@ -1,15 +1,4 @@
 <resources>
-    <!-- Reply Preference -->
-    <string-array name="reply_entries">
-        <item>Reply</item>
-        <item>Reply to all</item>
-    </string-array>
-
-    <string-array name="reply_values">
-        <item>reply</item>
-        <item>reply_all</item>
-    </string-array>
-
     <string-array name="units">
         <item>Seleccione unidad</item>
         <item>Caja(s)</item>
@@ -21,5 +10,17 @@
         <item>Mililitro(s)</item>
         <item>Paquete(s)</item>
         <item>Unidad(es)</item>
+    </string-array>
+
+    <string-array name="themes_entries">
+        <item>Definido por sistema</item>
+        <item>Tema oscuro</item>
+        <item>Tema claro</item>
+    </string-array>
+
+    <string-array name="themes_values">
+        <item>system</item>
+        <item>dark</item>
+        <item>light</item>
     </string-array>
 </resources>

@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.skysam.hchirinos.diesan.R
 
 class SettingsActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)

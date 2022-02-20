@@ -27,4 +27,10 @@ object Constants {
     const val NUMBER_LOT = "numberLot"
 
     const val CUSTOMER = "customer"
+    
+    const val PREFERENCES = "preferences"
+    const val PREFERENCE_THEME = "theme"
+    const val PREFERENCE_THEME_DARK = "dark"
+    const val PREFERENCE_THEME_LIGHT = "light"
+    const val PREFERENCE_THEME_SYSTEM = "system"
 }
