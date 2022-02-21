@@ -91,6 +91,13 @@
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>
+    <string name="text_amount">Monto ($)</string>
+    <string name="text_amount_sell">Monto de Ventas</string>
+    <string name="text_amount_lots">Compra de lotes</string>
+    <string name="chip_week">Rango de Fecha</string>
+    <string name="chip_month">Mensual</string>
+    <string name="text_date_range">%1$s - %2$s</string>
+    <string name="text_total_graph_zero">Balance en cero en este período</string>
 
     <!--Settings -->
     <string name="text_about">Información de la App</string>
