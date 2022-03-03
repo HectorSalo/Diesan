@@ -7,6 +7,4 @@ import com.skysam.hchirinos.diesan.common.dataClass.Lot
  */
 interface StockOnClick {
  fun viewDetail(lot: Lot)
- fun sell(lot: Lot)
- fun share(lot: Lot)
 }

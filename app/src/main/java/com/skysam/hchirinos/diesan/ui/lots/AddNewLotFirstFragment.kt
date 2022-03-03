@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
-import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentAddNewLotFirstBinding
 import com.skysam.hchirinos.diesan.ui.common.ExitDialog
@@ -55,9 +54,11 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         binding.etQuantity.inputType = InputType.TYPE_CLASS_NUMBER
         binding.etPrice.inputType = InputType.TYPE_CLASS_NUMBER
         binding.etProfit.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        binding.etItemShip.inputType = InputType.TYPE_CLASS_NUMBER
         binding.etProfit.addTextChangedListener(this)
         binding.etPrice.addTextChangedListener(this)
         binding.etTax.addTextChangedListener(this)
+        binding.etItemShip.addTextChangedListener(this)
 
         binding.etProduct.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             Class.keyboardClose(binding.root)
@@ -69,6 +70,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             binding.etQuantity.setText(productSelected?.quantity.toString())
             binding.etTax.setText(Class.convertDoubleToString(productSelected!!.tax))
             binding.etProfit.setText(Class.convertDoubleToString(productSelected!!.percentageProfit))
+            binding.etItemShip.setText(Class.convertDoubleToString(productSelected!!.ship))
         }
 
         adapterNewLot = ItemsNewLotAdapter(products, this)
@@ -118,6 +120,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                     products.addAll(it)
                     adapterNewLot.notifyItemInserted(products.size - 1)
                     binding.etProduct.setText("")
+                    binding.etItemShip.setText(getString(R.string.text_price_init))
                     binding.etPrice.setText(getString(R.string.text_price_init))
                     binding.etQuantity.setText("")
                     binding.etProfit.setText("")
@@ -146,6 +149,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         binding.tfPrice.error = null
         binding.tfQuantity.error = null
         binding.tfProfit.error = null
+        binding.tfItemShip.error = null
 
         val name = binding.etProduct.text.toString().trim()
         if (name.isEmpty()) {
@@ -160,6 +164,13 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             return
         }
         price = price.replace(".", "").replace(",", ".")
+        var ship = binding.etItemShip.text.toString()
+        if (ship == "0,00") {
+            binding.tfItemShip.error = getString(R.string.error_price_zero)
+            binding.etItemShip.requestFocus()
+            return
+        }
+        ship = ship.replace(".", "").replace(",", ".")
         val quantity = binding.etQuantity.text.toString()
         if (quantity.isEmpty()) {
             binding.tfQuantity.error = getString(R.string.error_field_empty)
@@ -179,7 +190,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             binding.etProfit.requestFocus()
             return
         }
-        val profitPerD = profitPercentage.toDouble()
+        val profitPerD = profitPercentage.toDouble() / 100.00
         if (profitPerD <= 0) {
             binding.tfProfit.error = getString(R.string.error_price_zero)
             binding.etProfit.requestFocus()
@@ -192,6 +203,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         if (productSelected != null) {
             if (productSelected!!.name == name) {
                 productSelected!!.price = price.toDouble()
+                productSelected!!.ship = ship.toDouble()
                 productSelected!!.quantity = quantityInt
                 productSelected!!.tax = tax.toDouble()
                 productSelected!!.percentageProfit = profitPerD
@@ -202,7 +214,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                     name,
                     price.toDouble(),
                     quantityInt,
-                    0.0,
+                    ship.toDouble(),
                     tax.toDouble(),
                     0.0,
                     0.0,
@@ -218,7 +230,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 name,
                 price.toDouble(),
                 quantityInt,
-                0.0,
+                ship.toDouble(),
                 tax.toDouble(),
                 0.0,
                 0.0,
@@ -228,6 +240,12 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 ""
             )
         }
+        productToSend.sumTotal = (productToSend.price + productToSend.tax + productToSend.ship) *
+                productToSend.quantity
+        productToSend.priceByUnit = productToSend.sumTotal / productToSend.quantity
+        productToSend.priceToSell = (productToSend.priceByUnit * productToSend.percentageProfit) +
+                productToSend.priceByUnit
+        productToSend.amountProfit = productToSend.priceToSell - productToSend.priceByUnit
         viewModel.addProduct(productToSend)
         viewModel.addTotal(price.toDouble() * quantityInt)
     }
@@ -284,6 +302,12 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 binding.etProfit.setText(cadena)
                 binding.etProfit.setSelection(cadena.length)
                 binding.etProfit.addTextChangedListener(this)
+            }
+            if (s.toString() == binding.etItemShip.text.toString()) {
+                binding.etItemShip.removeTextChangedListener(this)
+                binding.etItemShip.setText(cadena)
+                binding.etItemShip.setSelection(cadena.length)
+                binding.etItemShip.addTextChangedListener(this)
             }
         }
     }

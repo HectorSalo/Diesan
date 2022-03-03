@@ -1,14 +1,12 @@
 package com.skysam.hchirinos.diesan.ui.lots
 
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -22,7 +20,7 @@ import com.skysam.hchirinos.diesan.databinding.FragmentAddNewLotSecondBinding
 import java.text.DateFormat
 import java.util.*
 
-class AddNewLotSecondFragment : Fragment(), TextWatcher {
+class AddNewLotSecondFragment : Fragment() {
 
     private var _binding: FragmentAddNewLotSecondBinding? = null
     private val binding get() = _binding!!
@@ -45,10 +43,8 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
         super.onViewCreated(view, savedInstanceState)
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
-        binding.etShip.addTextChangedListener(this)
 
         binding.etNumberLot.inputType = InputType.TYPE_CLASS_NUMBER
-        binding.etShip.inputType = InputType.TYPE_CLASS_NUMBER
 
         adapterItems = ItemsDetailsNewLotAdapter(products)
         binding.rvProducts.apply {
@@ -88,32 +84,13 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
             if (_binding != null) {
                 products.clear()
                 products.addAll(it)
-            }
-        }
-        viewModel.ship.observe(viewLifecycleOwner) {
-            if (_binding != null) {
-                binding.etShip.removeTextChangedListener(this)
-                binding.etShip.setText(Class.convertDoubleToString(it))
-                binding.etShip.setSelection(Class.convertDoubleToString(it).length)
-                binding.etShip.addTextChangedListener(this)
-
-                val costShipByItem = it / products.size
-                binding.etItemShip.setText(Class.convertDoubleToString(costShipByItem))
-
-                for (item in products) {
-                    item.sumTotal = (item.price + item.tax + it) * item.quantity
-                    item.priceByUnit = item.sumTotal / item.quantity
-                    item.priceToSell = (item.priceByUnit + item.percentageProfit) + item.priceByUnit
-                    item.amountProfit = item.priceToSell - item.priceByUnit
-                }
-                adapterItems.notifyItemRangeChanged(0, products.size)
+                adapterItems.notifyItemRangeInserted(0, products.size)
             }
         }
     }
 
     private fun validateData() {
         binding.tfNumberLot.error = null
-        binding.tfShip.error = null
 
         val numberLot = binding.etNumberLot.text.toString()
         if (numberLot.isEmpty()) {
@@ -134,20 +111,13 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
                 return
             }
         }
-        var ship = binding.etShip.text.toString()
-        if (ship == "0,00") {
-            binding.tfShip.error = getString(R.string.error_price_zero)
-            binding.etShip.requestFocus()
-            return
-        }
-        ship = ship.replace(".", "").replace(",", ".")
-
+       
         Class.keyboardClose(binding.root)
         val newLot = Lot(
             Constants.ID,
             numberLotInt,
             Date(dateSelected),
-            ship.toDouble(),
+            0.0,
             products
         )
         viewModel.sendNewLot(newLot, productsOlder)
@@ -174,23 +144,5 @@ class AddNewLotSecondFragment : Fragment(), TextWatcher {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-    }
-
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-    }
-
-    override fun afterTextChanged(s: Editable?) {
-        var cadena = s.toString()
-        cadena = cadena.replace(",", "").replace(".", "")
-        val cantidad: Double = cadena.toDouble() / 100
-
-        if (s.toString() == binding.etShip.text.toString()) {
-            viewModel.valueShip(cantidad)
-        }
     }
 }

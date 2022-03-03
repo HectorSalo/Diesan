@@ -19,11 +19,6 @@ class NewLotViewModel : ViewModel() {
     }
     val products: LiveData<MutableList<Product>> = _products
 
-    private val _ship = MutableLiveData<Double>().apply {
-        value = 0.00
-    }
-    val ship: LiveData<Double> = _ship
-
     fun addProduct(product: Product) {
         _products.value?.add(product)
         _products.value = _products.value
@@ -43,10 +38,6 @@ class NewLotViewModel : ViewModel() {
 
     fun restTotal(value: Double) {
         _total.value = _total.value!! - value
-    }
-
-    fun valueShip(value: Double) {
-        _ship.value = value
     }
 
     fun sendNewLot(lot: Lot, productsOlder: MutableList<Product>) {

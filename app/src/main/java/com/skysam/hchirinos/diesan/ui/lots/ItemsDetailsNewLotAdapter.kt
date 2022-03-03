@@ -38,6 +38,8 @@ class ItemsDetailsNewLotAdapter(private var products: MutableList<Product>):
             Class.convertDoubleToString(item.priceToSell))
         holder.profit.text = context.getString(R.string.text_item_price,
             Class.convertDoubleToString(item.amountProfit))
+        holder.profitTotal.text = context.getString(R.string.text_item_price,
+            Class.convertDoubleToString(item.amountProfit * item.quantity))
     }
 
     override fun getItemCount(): Int = products.size
@@ -48,5 +50,6 @@ class ItemsDetailsNewLotAdapter(private var products: MutableList<Product>):
         val price: TextView = view.findViewById(R.id.tv_price)
         val amount: TextView = view.findViewById(R.id.tv_amount)
         val profit: TextView = view.findViewById(R.id.tv_profit)
+        val profitTotal: TextView = view.findViewById(R.id.tv_profit_total)
     }
 }

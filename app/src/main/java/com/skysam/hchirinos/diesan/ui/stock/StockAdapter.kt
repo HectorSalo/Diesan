@@ -36,9 +36,14 @@ class StockAdapter(private val lots: MutableList<Lot>, private val onClick: Stoc
   }
   holder.profitRemain.text = context.getString(R.string.text_profit_remain,
    Class.convertDoubleToString(profitRemain))
-
-  holder.sell.setOnClickListener { onClick.sell(item) }
-  holder.share.setOnClickListener { onClick.share(item) }
+  var profitGenerated = 0.0
+  for (prod in item.products) {
+   val quantitySell = (prod.sumTotal / prod.priceByUnit) - prod.quantity
+   profitGenerated += (prod.amountProfit * quantitySell)
+  }
+  holder.profitGenerated.text = context.getString(R.string.text_profit_generated,
+   Class.convertDoubleToString(profitGenerated))
+  
   holder.card.setOnClickListener { onClick.viewDetail(item) }
  }
 
@@ -48,8 +53,7 @@ class StockAdapter(private val lots: MutableList<Lot>, private val onClick: Stoc
   val number: TextView = view.findViewById(R.id.tv_number)
   val items: TextView = view.findViewById(R.id.tv_items)
   val profitRemain: TextView = view.findViewById(R.id.tv_profit_remain)
-  val sell: ImageButton = view.findViewById(R.id.ib_sell)
-  val share: ImageButton = view.findViewById(R.id.ib_share)
+  val profitGenerated: TextView = view.findViewById(R.id.tv_profit_generated)
   val card: MaterialCardView = view.findViewById(R.id.card)
  }
 }
