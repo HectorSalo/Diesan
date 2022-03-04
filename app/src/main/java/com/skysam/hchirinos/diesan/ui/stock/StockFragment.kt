@@ -83,34 +83,21 @@ class StockFragment : Fragment(), StockOnClick {
         }
 
     private fun loadViewModel() {
-        viewModel.lots.observe(viewLifecycleOwner) {
+        viewModel.productsFromLots.observe(viewLifecycleOwner) {
             if (_binding != null) {
-                products.clear()
-                for (lot in it) {
-                    products.addAll(lot.products)
+                if (_binding != null) {
+                    products.clear()
+                    products.addAll(it)
                     products.sortBy { product -> product.name }
-                    /*if (products.isNotEmpty()) {
-                        for (prod in lot.products) {
-                            for (produc in products) {
-                                if (produc.name == prod.name) {
-                                    produc.quantity = produc.quantity + prod.quantity
-                                } else {
-                                    products.add(prod)
-                                }
-                            }
-                        }
+                    if (products.isEmpty()) {
+                        binding.rvStock.visibility = View.GONE
+                        binding.tvListEmpty.visibility = View.VISIBLE
                     } else {
-                        products.addAll(lot.products)
-                    }*/
+                        binding.rvStock.visibility = View.VISIBLE
+                        binding.tvListEmpty.visibility = View.GONE
+                    }
+                    binding.progressBar.visibility = View.GONE
                 }
-                if (products.isEmpty()) {
-                    binding.rvStock.visibility = View.GONE
-                    binding.tvListEmpty.visibility = View.VISIBLE
-                } else {
-                    binding.rvStock.visibility = View.VISIBLE
-                    binding.tvListEmpty.visibility = View.GONE
-                }
-                binding.progressBar.visibility = View.GONE
             }
         }
     }

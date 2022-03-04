@@ -31,6 +31,10 @@ object Class {
     fun convertDateToString(value: Date): String {
         return DateFormat.getDateInstance().format(value)
     }
+    
+    fun roundedTwoDecimals(value: Double): Double {
+        return String.format(Locale.US, "%,.2f", value).toDouble()
+    }
 
     fun keyboardClose(view: View) {
         val imn = Diesan.Diesan.getContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

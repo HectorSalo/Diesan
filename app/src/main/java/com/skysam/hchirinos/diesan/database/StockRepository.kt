@@ -86,7 +86,7 @@ object StockRepository {
   }
  }
  
- fun updateStoock(lot: Lot) {
+ fun updateStock(lot: Lot) {
   val data = hashMapOf(
    Constants.NUMBER_LOT to lot.numberLot,
    Constants.DATE to lot.date,
@@ -100,5 +100,53 @@ object StockRepository {
  fun deleteStock(lot: Lot) {
   getInstance().document(lot.id)
    .delete()
+ }
+ 
+ fun getProductFromStock(): Flow<MutableList<Product>> {
+  return callbackFlow {
+   val request = getInstance()
+    .orderBy(Constants.DATE, Query.Direction.DESCENDING)
+    .addSnapshotListener { value, error ->
+     if (error != null) {
+      Log.w(ContentValues.TAG, "Listen failed.", error)
+      return@addSnapshotListener
+     }
+     
+     val products = mutableListOf<Product>()
+     for (lot in value!!) {
+      if (lot.get(Constants.PRODUCTS) != null) {
+       @Suppress("UNCHECKED_CAST")
+       val list = lot.data.getValue(Constants.PRODUCTS) as MutableList<HashMap<String, Any>>
+       for (item in list) {
+        val prod = Product(
+         item[Constants.ID].toString(),
+         item[Constants.NAME].toString(),
+         item[Constants.PRICE].toString().toDouble(),
+         item[Constants.QUANTITY].toString().toInt(),
+         item[Constants.SHIP].toString().toDouble(),
+         item[Constants.TAX].toString().toDouble(),
+         item[Constants.SUM_TOTAL].toString().toDouble(),
+         item[Constants.PRICE_BY_UNIT].toString().toDouble(),
+         item[Constants.PERCENTAGE_PROFIT].toString().toDouble(),
+         item[Constants.PRICE_TO_SELL].toString().toDouble(),
+         item[Constants.AMOUNT_PROFIT].toString().toDouble(),
+         item[Constants.IMAGE].toString()
+        )
+        var add = true
+        for (produc in products) {
+         if (prod.name == produc.name && prod.priceToSell == produc.priceToSell
+          && prod.amountProfit == produc.amountProfit) {
+          produc.quantity = produc.quantity + prod.quantity
+          add = false
+         }
+        }
+        if (add) products.add(prod)
+       }
+      }
+     }
+     trySend(products)
+    }
+   awaitClose { request.remove() }
+  }
  }
 }

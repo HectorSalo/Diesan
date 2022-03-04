@@ -69,7 +69,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
             binding.etPrice.setText(Class.convertDoubleToString(productSelected!!.price))
             binding.etQuantity.setText(productSelected?.quantity.toString())
             binding.etTax.setText(Class.convertDoubleToString(productSelected!!.tax))
-            binding.etProfit.setText(Class.convertDoubleToString(productSelected!!.percentageProfit))
+            binding.etProfit.setText(Class.convertDoubleToString(productSelected!!.percentageProfit * 100))
             binding.etItemShip.setText(Class.convertDoubleToString(productSelected!!.ship))
         }
 
@@ -240,12 +240,12 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 ""
             )
         }
-        productToSend.sumTotal = (productToSend.price + productToSend.tax + productToSend.ship) *
-                productToSend.quantity
-        productToSend.priceByUnit = productToSend.sumTotal / productToSend.quantity
-        productToSend.priceToSell = (productToSend.priceByUnit * productToSend.percentageProfit) +
-                productToSend.priceByUnit
-        productToSend.amountProfit = productToSend.priceToSell - productToSend.priceByUnit
+        productToSend.sumTotal = Class.roundedTwoDecimals((productToSend.price + productToSend.tax + productToSend.ship) *
+                productToSend.quantity)
+        productToSend.priceByUnit = Class.roundedTwoDecimals(productToSend.sumTotal / productToSend.quantity)
+        productToSend.priceToSell = Class.roundedTwoDecimals((productToSend.priceByUnit * productToSend.percentageProfit) +
+                productToSend.priceByUnit)
+        productToSend.amountProfit = Class.roundedTwoDecimals(productToSend.priceToSell - productToSend.priceByUnit)
         viewModel.addProduct(productToSend)
         viewModel.addTotal(price.toDouble() * quantityInt)
     }
