@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
@@ -11,30 +12,29 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
-import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.databinding.FragmentAddSaleBinding
 import com.skysam.hchirinos.diesan.ui.common.ExitDialog
 import com.skysam.hchirinos.diesan.ui.common.OnClickExit
-import com.skysam.hchirinos.diesan.ui.stock.StockViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 
 class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     private var _binding: FragmentAddSaleBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: StockViewModel by activityViewModels()
+    private val viewModel: NewSaleViewModel by activityViewModels()
     private lateinit var adapterAddSale: AddSaleAdapter
     private val products = mutableListOf<Product>()
     private val productsToSell = mutableListOf<Product>()
-    private lateinit var lotToSell: Lot
     private var dateSelected: Long = 0
     private lateinit var productToDelete: Product
 
@@ -95,15 +95,12 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     }
 
     private fun loadViewModel() {
-        viewModel.lotToSell.observe(viewLifecycleOwner) {
+        viewModel.productsFromLots.observe(viewLifecycleOwner) {
             if (_binding != null) {
-                lotToSell = it
                 products.clear()
-                products.addAll(it.products)
-                binding.tvTitle.text = getString(R.string.text_number_lot_item,
-                    it.numberLot.toString())
+                products.addAll(it)
                 val listNamesProduct = mutableListOf<String>()
-                for (prod in it.products) {
+                for (prod in products) {
                     listNamesProduct.add(prod.name)
                 }
                 val adapterAutocomplete = ArrayAdapter(requireContext(),
@@ -158,10 +155,30 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     }
 
     override fun onClickExit() {
-        viewModel.clearNewSale()
-        findNavController().navigate(R.id.action_addSaleFragment_to_FragmentStock)
+        requireActivity().finish()
     }
-
+    
+    override fun check(product: Product, isCheck: Boolean) {
+        val newPriceToSell = if (isCheck) product.priceToSell - 1 else product.priceToSell + 1
+        val productEdited = Product(
+            product.id,
+            product.name,
+            product.price,
+            product.quantity,
+            product.ship,
+            product.tax,
+            product.sumTotal,
+            product.priceByUnit,
+            product.percentageProfit,
+            newPriceToSell,
+            product.amountProfit,
+            product.image,
+            isCheck
+        )
+        adapterAddSale.notifyItemChanged(productsToSell.indexOf(product))
+        viewModel.editProductToSell(productEdited)
+    }
+    
     override fun delete(product: Product) {
         productToDelete = product
         viewModel.removeProducToSell(product)
@@ -170,8 +187,6 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     override fun edit(product: Product) {
         var quantityAvailable = 1
         val arrayQuantities = mutableListOf<String>()
-        val test = mutableListOf<Product>()
-        test.addAll(products)
         for (pro in products) {
             if (pro.id == product.id) {
                 quantityAvailable = pro.quantity
@@ -234,15 +249,24 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             }
             if (remove) products.remove(productRemove)
         }
-        val lot = Lot(
+        /*val lot = Lot(
             lotToSell.id,
             lotToSell.numberLot,
             lotToSell.date,
             lotToSell.ship,
             products
         )
-        viewModel.saveSale(sale, lot)
-        findNavController().navigate(R.id.action_addSaleFragment_to_FragmentStock)
+        viewModel.saveSale(sale, lot)*/
+    
+        binding.progressBar.visibility = View.VISIBLE
+        Snackbar.make(binding.root, getString(R.string.text_generate_new_sale), Snackbar.LENGTH_INDEFINITE).show()
+        requireActivity().window.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+        lifecycleScope.launch {
+            delay(2000)
+            requireActivity().finish()
+        }
     }
 
     private fun selecDate() {

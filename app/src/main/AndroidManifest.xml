@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Diesan">
         <activity
+            android:name=".ui.sales.AddSaleActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.settings.SettingsActivity"
             android:exported="false"
             android:label="@string/title_activity_settings" />
@@ -40,10 +43,10 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <intent-filter>
-                <action android:name="OPEN_APP"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="OPEN_APP" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
 
@@ -54,4 +57,5 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/blue_base_dark" />
     </application>
+
 </manifest>

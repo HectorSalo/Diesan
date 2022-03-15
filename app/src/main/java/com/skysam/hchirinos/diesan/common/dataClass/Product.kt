@@ -15,5 +15,6 @@ data class Product(
     var percentageProfit: Double = 0.0,
     var priceToSell: Double = 0.0,
     var amountProfit: Double = 0.0,
-    var image: String
+    var image: String,
+    var isCheck: Boolean = false
 )

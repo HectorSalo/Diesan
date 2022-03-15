@@ -10,7 +10,7 @@
         android:id="@+id/guideline"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintGuide_percent="0.4"
+        app:layout_constraintGuide_percent="0.2"
         android:orientation="horizontal"/>
 
     <androidx.constraintlayout.widget.Guideline
@@ -52,12 +52,27 @@
         android:id="@+id/btn_stats"
         android:layout_width="@dimen/width_button_home"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:drawableTop="@drawable/ic_stats_48"
         android:text="@string/title_stats"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/btn_stock" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_new_sale"
+        android:layout_width="@dimen/width_button_home"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:drawableTop="@drawable/ic_new_sale_48"
+        android:text="@string/text_new_sale"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_new_lot"
-        android:visibility="visible"/>
+        app:layout_constraintTop_toBottomOf="@+id/btn_new_lot" />
 </androidx.constraintlayout.widget.ConstraintLayout>

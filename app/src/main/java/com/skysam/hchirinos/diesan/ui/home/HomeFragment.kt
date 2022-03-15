@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.databinding.FragmentHomeBinding
 import com.skysam.hchirinos.diesan.ui.lots.NewLotActivity
+import com.skysam.hchirinos.diesan.ui.sales.AddSaleActivity
 import com.skysam.hchirinos.diesan.ui.settings.SettingsActivity
 import com.skysam.hchirinos.diesan.ui.stats.StatsActivity
 import com.skysam.hchirinos.diesan.ui.stock.StockActivity
@@ -35,6 +36,9 @@ class HomeFragment : Fragment() {
         }
         binding.btnStock.setOnClickListener {
             startActivity(Intent(requireContext(), StockActivity::class.java))
+        }
+        binding.btnNewSale.setOnClickListener {
+            startActivity(Intent(requireContext(), AddSaleActivity::class.java))
         }
     }
 

@@ -1,5 +1,6 @@
 package com.skysam.hchirinos.diesan.ui.stock
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
@@ -8,12 +9,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.skysam.hchirinos.diesan.R
-import com.skysam.hchirinos.diesan.common.dataClass.Lot
+import com.skysam.hchirinos.diesan.common.Class
+
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
+import com.skysam.hchirinos.diesan.ui.sales.AddSaleActivity
 
 
-class StockFragment : Fragment(), StockOnClick {
+class StockFragment : Fragment() {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
     private val viewModel: StockViewModel by activityViewModels()
@@ -76,7 +79,7 @@ class StockFragment : Fragment(), StockOnClick {
                 true
             }
             R.id.action_add_sale -> {
-                findNavController().navigate(R.id.action_FragmentStock_to_addSaleFragment)
+                startActivity(Intent(requireContext(), AddSaleActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -106,20 +109,15 @@ class StockFragment : Fragment(), StockOnClick {
         requireActivity().finish()
     }
 
-    override fun viewDetail(lot: Lot) {
-        viewModel.viewLot(lot)
-        val viewDetailsStockDialog = ViewDetailsStockDialog()
-        viewDetailsStockDialog.show(requireActivity().supportFragmentManager, tag)
-    }
-
     private fun share() {
-       /* val selection = StringBuilder()
-        for (item in lots) {
-            selection.append("\n").append("${item.name}: $${Class.convertDoubleToString(item.priceToSell)}")
+        val emojiPin = String(Character.toChars(0x1F4CC))
+        val selection = StringBuilder()
+        for (item in products) {
+            selection.append("\n").append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}")
         }
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, selection.toString())
-        startActivity(Intent.createChooser(intent, getString(R.string.title_share_dialog)))*/
+        startActivity(Intent.createChooser(intent, getString(R.string.title_share_dialog)))
     }
 }

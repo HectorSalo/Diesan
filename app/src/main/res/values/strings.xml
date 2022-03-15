@@ -83,12 +83,15 @@
     <string name="error_number_exists">Número usado</string>
 
     <!--Sales-->
+    <string name="text_new_sale">Nueva Venta</string>
     <string name="text_sell">Vender</string>
     <string name="text_customer">Cliente</string>
     <string name="text_date_sale_item">Fecha de venta: %1$s</string>
     <string name="text_customer_sale_item">Cliente: %1$s</string>
     <string name="title_select_quantity_dialog">Seleccionar cantidad</string>
     <string name="text_profit_total">Ganancia total</string>
+    <string name="text_generate_new_sale">Generando nueva Venta</string>
+    <string name="text_resale">Reventa</string>
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +26,7 @@ class AddSaleAdapter(private val products: MutableList<Product>, private val onC
         viewType: Int
     ): AddSaleAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.layout_item_new_lot, parent, false)
+            .inflate(R.layout.layout_item_new_sale, parent, false)
         context = parent.context
         return ViewHolder(view)
     }
@@ -39,10 +40,14 @@ class AddSaleAdapter(private val products: MutableList<Product>, private val onC
         holder.unit.text = context.getString(
             R.string.text_item_unit,
             Class.convertDoubleToString(item.priceToSell), Class.convertIntToString(item.quantity))
+        holder.checkBox.isChecked = item.isCheck
 
         holder.constraint.setOnClickListener { onClick.edit(item) }
         holder.buttonDelete.setOnClickListener {
             onClick.delete(item)
+        }
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            onClick.check(item, isChecked)
         }
     }
 
@@ -53,6 +58,7 @@ class AddSaleAdapter(private val products: MutableList<Product>, private val onC
         val unit: TextView = view.findViewById(R.id.tv_unit)
         val price: TextView = view.findViewById(R.id.tv_price)
         val buttonDelete: ImageButton = view.findViewById(R.id.ib_delete)
+        val checkBox: CheckBox = view.findViewById(R.id.checkBox)
         val constraint: ConstraintLayout = view.findViewById(R.id.constraint)
     }
 }

@@ -11,19 +11,8 @@
         tools:layout="@layout/fragment_stock"
         android:label="@string/title_stock">
         <action
-            android:id="@+id/action_FragmentStock_to_addSaleFragment"
-            app:destination="@id/addSaleFragment" />
-        <action
             android:id="@+id/action_FragmentStock_to_listLotsFragment"
             app:destination="@id/listLotsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/addSaleFragment"
-        android:name="com.skysam.hchirinos.diesan.ui.sales.AddSaleFragment"
-        tools:layout="@layout/fragment_add_sale" >
-        <action
-            android:id="@+id/action_addSaleFragment_to_FragmentStock"
-            app:destination="@id/FragmentStock" />
     </fragment>
     <fragment
         android:id="@+id/listLotsFragment"
