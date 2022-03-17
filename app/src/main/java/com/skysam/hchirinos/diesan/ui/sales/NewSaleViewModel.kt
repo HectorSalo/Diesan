@@ -16,6 +16,7 @@ import com.skysam.hchirinos.diesan.database.StockRepository
 
 class NewSaleViewModel: ViewModel() {
 	val productsFromLots: LiveData<MutableList<Product>> = StockRepository.getProductFromStock().asLiveData()
+	val lots: LiveData<MutableList<Lot>> = StockRepository.getLotsFromStock().asLiveData()
 	
 	private val _productsToSell =
 		MutableLiveData<MutableList<Product>>().apply { value = mutableListOf() }
@@ -48,6 +49,8 @@ class NewSaleViewModel: ViewModel() {
 				restTotal(pro.quantity * pro.priceToSell)
 				addTotal(product.quantity * product.priceToSell)
 				pro.quantity = product.quantity
+				pro.priceToSell = product.priceToSell
+				pro.isCheck = product.isCheck
 			}
 		}
 		_productsToSell.value = _productsToSell.value
@@ -61,8 +64,11 @@ class NewSaleViewModel: ViewModel() {
 		_total.value = _total.value!! - value
 	}
 	
-	fun saveSale(sale: Sale, lot: Lot) {
+	fun saveSale(sale: Sale) {
 		SaleRespository.addSale(sale)
+	}
+	
+	fun updateStock(lot: Lot) {
 		if (lot.products.isEmpty()) StockRepository.deleteStock(lot)
 		else StockRepository.updateStock(lot)
 	}

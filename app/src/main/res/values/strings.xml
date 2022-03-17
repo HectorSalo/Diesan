@@ -102,6 +102,7 @@
     <string name="chip_month">Mensual</string>
     <string name="text_date_range">%1$s - %2$s</string>
     <string name="text_total_graph_zero">Balance en cero en este período</string>
+    <string name="text_amount_add_graph">%1$s</string>
 
     <!--Settings -->
     <string name="text_about">Información de la App</string>

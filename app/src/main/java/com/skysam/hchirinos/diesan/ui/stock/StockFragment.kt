@@ -88,19 +88,18 @@ class StockFragment : Fragment() {
     private fun loadViewModel() {
         viewModel.productsFromLots.observe(viewLifecycleOwner) {
             if (_binding != null) {
-                if (_binding != null) {
-                    products.clear()
-                    products.addAll(it)
-                    products.sortBy { product -> product.name }
-                    if (products.isEmpty()) {
-                        binding.rvStock.visibility = View.GONE
-                        binding.tvListEmpty.visibility = View.VISIBLE
-                    } else {
-                        binding.rvStock.visibility = View.VISIBLE
-                        binding.tvListEmpty.visibility = View.GONE
-                    }
-                    binding.progressBar.visibility = View.GONE
+                products.clear()
+                products.addAll(it)
+                products.sortBy { product -> product.name }
+                if (products.isEmpty()) {
+                    binding.rvStock.visibility = View.GONE
+                    binding.tvListEmpty.visibility = View.VISIBLE
+                } else {
+                    binding.rvStock.visibility = View.VISIBLE
+                    binding.tvListEmpty.visibility = View.GONE
+                    adapterItems.notifyDataSetChanged()
                 }
+                binding.progressBar.visibility = View.GONE
             }
         }
     }

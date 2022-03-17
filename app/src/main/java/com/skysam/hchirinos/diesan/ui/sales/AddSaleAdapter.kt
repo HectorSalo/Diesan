@@ -46,7 +46,8 @@ class AddSaleAdapter(private val products: MutableList<Product>, private val onC
         holder.buttonDelete.setOnClickListener {
             onClick.delete(item)
         }
-        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+        holder.checkBox.setOnClickListener {
+            val isChecked = !item.isCheck
             onClick.check(item, isChecked)
         }
     }

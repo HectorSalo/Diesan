@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
+import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.databinding.FragmentAddSaleBinding
@@ -34,9 +35,11 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     private val viewModel: NewSaleViewModel by activityViewModels()
     private lateinit var adapterAddSale: AddSaleAdapter
     private val products = mutableListOf<Product>()
+    private val lots = mutableListOf<Lot>()
     private val productsToSell = mutableListOf<Product>()
     private var dateSelected: Long = 0
     private lateinit var productToDelete: Product
+    private var positionToEdit = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -122,6 +125,9 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                     binding.etProduct.setText("")
                     binding.etProduct.requestFocus()
                 }
+                if (productsToSell.size == it.size && positionToEdit >= 0) {
+                    adapterAddSale.notifyItemChanged(positionToEdit)
+                }
                 if (it.isNotEmpty()) {
                     binding.tvListEmpty.visibility = View.GONE
                     binding.rvProducts.visibility = View.VISIBLE
@@ -136,6 +142,15 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                 R.string.text_total_dolar,
                 Class.convertDoubleToString(it)
             )
+        }
+        viewModel.lots.observe(viewLifecycleOwner) {
+            if (_binding != null) {
+                if (it.isNotEmpty()) {
+                    lots.clear()
+                    lots.addAll(it)
+                    lots.sortBy { lot -> lot.date }
+                }
+            }
         }
     }
 
@@ -175,7 +190,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             product.image,
             isCheck
         )
-        adapterAddSale.notifyItemChanged(productsToSell.indexOf(product))
+        positionToEdit = productsToSell.indexOf(product)
         viewModel.editProductToSell(productEdited)
     }
     
@@ -211,8 +226,10 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                     product.percentageProfit,
                     product.priceToSell,
                     product.amountProfit,
-                    product.image)
-                adapterAddSale.notifyItemChanged(productsToSell.indexOf(product))
+                    product.image,
+                    product.isCheck
+                )
+                positionToEdit = productsToSell.indexOf(product)
                 viewModel.editProductToSell(productEdited)
                 dialogInterface.dismiss()
             }
@@ -235,28 +252,37 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             customer,
             productsToSell
         )
-        for (pro in productsToSell) {
-            var remove = false
-            var productRemove: Product? = null
-            for (prod in products) {
-                if (pro.id == prod.id) {
-                    prod.quantity = prod.quantity - pro.quantity
-                    if (prod.quantity == 0) {
-                        remove = true
-                        productRemove = prod
+        viewModel.saveSale(sale)
+    
+        val lotsFinal = mutableListOf<Lot>()
+        lotsFinal.addAll(lots)
+        val quantitiesProducts = mutableListOf<Product>()
+        quantitiesProducts.addAll(productsToSell)
+        for (lot in lotsFinal) {
+            val productsByLot = mutableListOf<Product>()
+            productsByLot.addAll(lot.products)
+            for (pr in productsByLot) {
+                for (pro in quantitiesProducts) {
+                    if (pro.name == pr.name && pro.priceByUnit == pr.priceByUnit
+                        && pro.percentageProfit == pr.percentageProfit) {
+                        val quanityFinal = pr.quantity - pro.quantity
+                        if (quanityFinal == 0) {
+                            lot.products.remove(pr)
+                            pro.quantity = 0
+                        }
+                        if (quanityFinal < 0) {
+                            lot.products.remove(pr)
+                            pro.quantity = quanityFinal * (-1)
+                        }
+                        if (quanityFinal > 0) {
+                            lot.products[lot.products.indexOf(pr)].quantity = quanityFinal
+                            pro.quantity = 0
+                        }
                     }
                 }
             }
-            if (remove) products.remove(productRemove)
+            viewModel.updateStock(lot)
         }
-        /*val lot = Lot(
-            lotToSell.id,
-            lotToSell.numberLot,
-            lotToSell.date,
-            lotToSell.ship,
-            products
-        )
-        viewModel.saveSale(sale, lot)*/
     
         binding.progressBar.visibility = View.VISIBLE
         Snackbar.make(binding.root, getString(R.string.text_generate_new_sale), Snackbar.LENGTH_INDEFINITE).show()

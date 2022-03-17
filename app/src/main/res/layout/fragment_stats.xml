@@ -133,17 +133,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/text_amount_lots" />
+                android:text="@string/text_profit_total" />
 
             <TextView
-                android:id="@+id/tv_expenses"
+                android:id="@+id/tv_profit"
                 style="@style/TextAppearance.AppCompat.Medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/text_price_init"
-                android:textColor="@color/red" />
+                android:textColor="@color/green_dark" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -181,6 +181,7 @@
 
     <TextView
         android:id="@+id/tv_total"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
