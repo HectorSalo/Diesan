@@ -164,7 +164,7 @@
         android:layout_marginEnd="8dp"
         android:backgroundTint="@color/blue_base_dark"
         android:contentDescription="@string/text_product"
-        android:tintMode="@color/white"
+        android:tintMode="?attr/colorOnPrimary"
         app:fabSize="mini"
         app:layout_constraintBottom_toBottomOf="@+id/tf_profit"
         app:layout_constraintEnd_toEndOf="parent"

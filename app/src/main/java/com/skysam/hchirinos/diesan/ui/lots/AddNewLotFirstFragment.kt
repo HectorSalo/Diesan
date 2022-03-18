@@ -243,11 +243,11 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         productToSend.sumTotal = Class.roundedTwoDecimals((productToSend.price + productToSend.tax + productToSend.ship) *
                 productToSend.quantity)
         productToSend.priceByUnit = Class.roundedTwoDecimals(productToSend.sumTotal / productToSend.quantity)
-        productToSend.priceToSell = Class.roundedTwoDecimals((productToSend.priceByUnit * productToSend.percentageProfit) +
+        productToSend.priceToSell = Class.rounded((productToSend.priceByUnit * productToSend.percentageProfit) +
                 productToSend.priceByUnit)
         productToSend.amountProfit = Class.roundedTwoDecimals(productToSend.priceToSell - productToSend.priceByUnit)
         viewModel.addProduct(productToSend)
-        viewModel.addTotal(price.toDouble() * quantityInt)
+        viewModel.addTotal((price.toDouble() + ship.toDouble() + tax.toDouble()) * quantityInt)
     }
 
     override fun onDestroyView() {
@@ -257,7 +257,7 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
 
     override fun delete(product: Product) {
         productToDelete = product
-        viewModel.restTotal(product.price * product.quantity)
+        viewModel.restTotal((product.price + product.tax + product.ship) * product.quantity)
         viewModel.removeProduct(product)
     }
 

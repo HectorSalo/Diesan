@@ -12,4 +12,7 @@
         <item name="background">@color/blue_base_normal</item>
     </style>
 
+    <style name="myCustomMenuTextAppearance" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

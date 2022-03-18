@@ -111,8 +111,9 @@ class StockFragment : Fragment() {
     private fun share() {
         val emojiPin = String(Character.toChars(0x1F4CC))
         val selection = StringBuilder()
+        selection.append("Buenas, productos disponibles: ")
         for (item in products) {
-            selection.append("\n").append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}")
+            selection.append("\n\n").append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}")
         }
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"

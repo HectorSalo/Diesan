@@ -15,6 +15,7 @@ import java.text.DateFormat
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 /**
  * Created by Hector Chirinos on 06/01/2022.
@@ -34,6 +35,10 @@ object Class {
     
     fun roundedTwoDecimals(value: Double): Double {
         return String.format(Locale.US, "%,.2f", value).toDouble()
+    }
+    
+    fun rounded(value: Double): Double {
+        return value.roundToInt().toDouble()
     }
 
     fun keyboardClose(view: View) {

@@ -75,6 +75,7 @@ class LotsFragment : Fragment(), SearchView.OnQueryTextListener, LotOnClick {
         menu.clear()
         inflater.inflate(R.menu.main, menu)
         val item = menu.findItem(R.id.action_search)
+        item.isVisible = false
         itemSearch = item.actionView as SearchView
         itemSearch.setOnQueryTextListener(this)
         val itemSettings = menu.findItem(R.id.action_settings)

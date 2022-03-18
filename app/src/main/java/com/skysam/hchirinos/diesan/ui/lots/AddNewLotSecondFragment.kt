@@ -113,11 +113,16 @@ class AddNewLotSecondFragment : Fragment() {
         }
        
         Class.keyboardClose(binding.root)
+        var ship = 0.0
+        for (pro in products) {
+            ship += pro.sumTotal
+        }
+        
         val newLot = Lot(
             Constants.ID,
             numberLotInt,
             Date(dateSelected),
-            0.0,
+            ship,
             products
         )
         viewModel.sendNewLot(newLot, productsOlder)

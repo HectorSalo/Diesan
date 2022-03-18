@@ -33,9 +33,9 @@ class ItemsNewLotAdapter(private val products: MutableList<Product>, private val
         val item = products[position]
         holder.name.text = item.name
         holder.price.text = context.getString(R.string.text_item_price,
-            Class.convertDoubleToString(item.price * item.quantity))
+            Class.convertDoubleToString((item.price + item.ship + item.tax) * item.quantity))
         holder.unit.text = context.getString(R.string.text_item_unit,
-            Class.convertDoubleToString(item.price), Class.convertIntToString(item.quantity))
+            Class.convertDoubleToString(item.price + item.ship + item.tax), Class.convertIntToString(item.quantity))
 
         holder.buttonDelete.setOnClickListener {
             onClickInterface.delete(item)

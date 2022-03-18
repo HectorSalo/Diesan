@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "521200966078-ojfuqp5cb9u6h0biop89ks0hki10bg60.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.skysam.hchirinos.diesan",
+            "certificate_hash": "e0f5a45721ec770108cc3e520d7b41b528ba4cd0"
+          }
+        },
+        {
           "client_id": "521200966078-3fep0cmbi0praodbrgmpnddfgqdburj5.apps.googleusercontent.com",
           "client_type": 3
         }
