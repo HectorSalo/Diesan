@@ -110,11 +110,21 @@ class StockFragment : Fragment() {
 
     private fun share() {
         val emojiPin = String(Character.toChars(0x1F4CC))
+        val emojiHeart = String(Character.toChars(0x2764))
         val selection = StringBuilder()
         selection.append("Buenas, productos disponibles: ")
         for (item in products) {
             selection.append("\n\n").append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}")
         }
+        selection.append("\n\n")
+            .append("Hacemos las entregas personales con *previo acuerdo* en la plaza Madariaga del Paraíso y en la Clínica Popular del Paraíso (lunes a sábado)\n" +
+                    "\n" +
+                    "También contamos con servicio de delivery, *tiene un costo adicional dependiendo de la zona*\n" +
+                    "\n" +
+                    "Si tu pedido llega a \$70 el delivery sale gratuito.\n" +
+                    "\n" +
+                    "Síguenos en Instagram @distribuidoradiesan")
+            .append(emojiHeart)
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, selection.toString())
