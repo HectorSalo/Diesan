@@ -34,7 +34,9 @@ object Class {
     }
     
     fun roundedTwoDecimals(value: Double): Double {
-        return String.format(Locale.US, "%,.2f", value).toDouble()
+        var cadena = String.format(Locale.US, "%,.2f", value)
+        cadena = cadena.replace(",", "")
+        return cadena.toDouble()
     }
     
     fun rounded(value: Double): Double {

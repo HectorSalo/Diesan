@@ -33,6 +33,11 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
     private val productsOlder = mutableListOf<Product>()
     private lateinit var productToDelete: Product
     private var productSelected: Product? = null
+    private var quantity = 0
+    private var priceUnit = 0.0
+    private var priceSend = 0.0
+    private var tax = 0.0
+    private var profit = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -125,6 +130,8 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                     binding.etQuantity.setText("")
                     binding.etProfit.setText("")
                     binding.etTax.setText(getString(R.string.text_price_init))
+                    binding.etProfitUnit.setText(getString(R.string.text_price_init))
+                    binding.etSell.setText(getString(R.string.text_price_init))
                     binding.etProduct.requestFocus()
                 }
                 if (it.isNotEmpty()) {
@@ -282,6 +289,9 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         var cadena = s.toString()
         cadena = cadena.replace(",", "").replace(".", "")
         if (cadena.isNotEmpty()) {
+            val quantityS = binding.etQuantity.text.toString()
+            if (quantityS.isNotEmpty()) quantity = quantityS.toInt()
+            
             val cantidad: Double = cadena.toDouble() / 100
             cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
 
@@ -290,24 +300,51 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
                 binding.etPrice.setText(cadena)
                 binding.etPrice.setSelection(cadena.length)
                 binding.etPrice.addTextChangedListener(this)
+                
+                priceUnit = cantidad
             }
             if (s.toString() == binding.etTax.text.toString()) {
                 binding.etTax.removeTextChangedListener(this)
                 binding.etTax.setText(cadena)
                 binding.etTax.setSelection(cadena.length)
                 binding.etTax.addTextChangedListener(this)
+                
+                tax = cantidad
             }
             if (s.toString() == binding.etProfit.text.toString()) {
                 binding.etProfit.removeTextChangedListener(this)
                 binding.etProfit.setText(cadena)
                 binding.etProfit.setSelection(cadena.length)
                 binding.etProfit.addTextChangedListener(this)
+                
+                profit = cantidad
             }
             if (s.toString() == binding.etItemShip.text.toString()) {
                 binding.etItemShip.removeTextChangedListener(this)
                 binding.etItemShip.setText(cadena)
                 binding.etItemShip.setSelection(cadena.length)
                 binding.etItemShip.addTextChangedListener(this)
+                
+                priceSend = cantidad
+            }
+    
+            if (profit > 0) {
+                val sumTotal = Class.roundedTwoDecimals((priceUnit + tax + priceSend) * quantity)
+                if (sumTotal > 0) {
+                    val priceByUnit = Class.roundedTwoDecimals(sumTotal / quantity)
+                    val priceToSell = Class.rounded((priceByUnit * (profit / 100.00)) + priceByUnit)
+                    val amountProfit = Class.roundedTwoDecimals(priceToSell - priceByUnit)
+        
+        
+                    binding.etProfitUnit.setText(String.format(Locale.GERMANY, "%,.2f", amountProfit))
+                    binding.etSell.setText(String.format(Locale.GERMANY, "%,.2f", priceToSell))
+                } else {
+                    binding.etProfitUnit.setText(String.format(Locale.GERMANY, "%,.2f", 0.0))
+                    binding.etSell.setText(String.format(Locale.GERMANY, "%,.2f", 0.0))
+                }
+            } else {
+                binding.etProfitUnit.setText(String.format(Locale.GERMANY, "%,.2f", 0.0))
+                binding.etSell.setText(String.format(Locale.GERMANY, "%,.2f", 0.0))
             }
         }
     }
