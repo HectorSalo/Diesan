@@ -144,7 +144,7 @@ object StockRepository {
        }
       }
      }
-     trySend(products)
+     trySend(Class.organizedAlphabeticList(products))
     }
    awaitClose { request.remove() }
   }

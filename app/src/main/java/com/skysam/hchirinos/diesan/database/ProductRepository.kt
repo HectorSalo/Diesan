@@ -3,7 +3,10 @@ package com.skysam.hchirinos.diesan.database
 import android.content.ContentValues
 import android.net.Uri
 import android.util.Log
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.MetadataChanges
+import com.google.firebase.firestore.Query
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
@@ -15,7 +18,9 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.text.Collator
 import java.util.*
+import kotlin.Comparator
 
 /**
  * Created by Hector Chirinos on 18/01/2022.
@@ -118,7 +123,7 @@ object ProductRepository {
                         )
                         products.add(productNew)
                     }
-                    trySend(products)
+                    trySend(Class.organizedAlphabeticList(products))
                 }
             awaitClose { request.remove() }
         }

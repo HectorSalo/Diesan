@@ -90,7 +90,6 @@ class StockFragment : Fragment() {
             if (_binding != null) {
                 products.clear()
                 products.addAll(it)
-                products.sortBy { product -> product.name }
                 if (products.isEmpty()) {
                     binding.rvStock.visibility = View.GONE
                     binding.tvListEmpty.visibility = View.VISIBLE

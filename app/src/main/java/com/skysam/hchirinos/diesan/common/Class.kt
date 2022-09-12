@@ -10,7 +10,9 @@ import android.widget.Toast
 import com.skysam.hchirinos.diesan.BuildConfig
 
 import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.dataClass.Product
 import java.io.FileNotFoundException
+import java.text.Collator
 import java.text.DateFormat
 import java.util.*
 import kotlin.math.ceil
@@ -78,5 +80,27 @@ object Class {
     
     fun getEnviroment(): String {
         return BuildConfig.BUILD_TYPE
+    }
+    
+    fun organizedAlphabeticList(list: MutableList<Product>): MutableList<Product> {
+        Collections.sort(list, object : Comparator<Product> {
+            var collator = Collator.getInstance()
+            override fun compare(p0: Product?, p1: Product?): Int {
+                return collator.compare(p0?.name, p1?.name)
+            }
+            
+        })
+        return list
+    }
+    
+    fun organizedAlphabeticString(list: MutableList<String>): MutableList<String> {
+        Collections.sort(list, object : Comparator<String> {
+            var collator = Collator.getInstance()
+            override fun compare(p0: String?, p1: String?): Int {
+                return collator.compare(p0, p1)
+            }
+            
+        })
+        return list
     }
 }

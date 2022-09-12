@@ -107,7 +107,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                     listNamesProduct.add(prod.name)
                 }
                 val adapterAutocomplete = ArrayAdapter(requireContext(),
-                    R.layout.layout_list_autocomplete, listNamesProduct.sorted())
+                    R.layout.layout_list_autocomplete, Class.organizedAlphabeticString(listNamesProduct))
                 binding.etProduct.setAdapter(adapterAutocomplete)
             }
         }
