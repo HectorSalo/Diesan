@@ -8,13 +8,11 @@ import androidx.lifecycle.asLiveData
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
-import com.skysam.hchirinos.diesan.database.LotsRepository
-import com.skysam.hchirinos.diesan.database.PreferencesRepository
-import com.skysam.hchirinos.diesan.database.ProductRepository
-import com.skysam.hchirinos.diesan.database.SaleRespository
+import com.skysam.hchirinos.diesan.database.*
 
 class MainViewModel : ViewModel() {
     val lots: LiveData<MutableList<Lot>> = LotsRepository.getLots().asLiveData()
+    val lotsStock: LiveData<MutableList<Lot>> = StockRepository.getLotsFromStock().asLiveData()
     val products: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
     val sales: LiveData<MutableList<Sale>> = SaleRespository.getSales().asLiveData()
     val theme: LiveData<String> = PreferencesRepository.getThemeSaved().asLiveData()
@@ -59,5 +57,13 @@ class MainViewModel : ViewModel() {
     
     fun viewSale(sale: Sale) {
         _saleToView.value = sale
+    }
+    
+    fun anulledSale(sale: Sale) {
+        SaleRespository.anulledSale(sale)
+    }
+    
+    fun updateStock(lot: Lot) {
+        StockRepository.updateStock(lot)
     }
 }

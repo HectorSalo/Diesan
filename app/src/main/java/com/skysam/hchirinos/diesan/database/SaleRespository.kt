@@ -49,6 +49,7 @@ object SaleRespository {
      val sales = mutableListOf<Sale>()
      for (sale in value!!) {
       val products = mutableListOf<Product>()
+      var anulled = false
       if (sale.get(Constants.PRODUCTS) != null) {
        @Suppress("UNCHECKED_CAST")
        val list = sale.data.getValue(Constants.PRODUCTS) as MutableList<HashMap<String, Any>>
@@ -70,11 +71,13 @@ object SaleRespository {
         products.add(prod)
        }
       }
+      if (sale.getBoolean(Constants.IS_ANULLED) != null) anulled = sale.getBoolean(Constants.IS_ANULLED)!!
       val saleNew = Sale(
        sale.id,
        sale.getDate(Constants.DATE)!!,
        sale.getString(Constants.CUSTOMER)!!,
-       products
+       products,
+       anulled
       )
       sales.add(saleNew)
      }
@@ -82,5 +85,11 @@ object SaleRespository {
     }
    awaitClose { request.remove() }
   }
+ }
+ 
+ fun anulledSale(sale: Sale) {
+  getInstance()
+   .document(sale.id)
+   .update(Constants.IS_ANULLED, true)
  }
 }

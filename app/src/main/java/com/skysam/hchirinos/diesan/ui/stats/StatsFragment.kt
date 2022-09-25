@@ -99,7 +99,7 @@ class StatsFragment : Fragment() {
         }
         binding.spinnerYear.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, id: Long) {
-                yearSelected = if (position == 0) 2022 else 2023
+                yearSelected = position + 2022
                 loadData()
             }
         
@@ -116,7 +116,9 @@ class StatsFragment : Fragment() {
         viewModel.sales.observe(viewLifecycleOwner) {
             if (_binding != null) {
                 sales.clear()
-                sales.addAll(it)
+                for (sal in it) {
+                    if (!sal.isAnulled) sales.add(sal)
+                }
                 loadData()
             }
         }
@@ -198,7 +200,7 @@ class StatsFragment : Fragment() {
     
     private fun configAdapter() {
         val selectionSpinner = monthSelected
-        val selectionSpinnerYear = if (yearSelected == 2022) 0 else 1
+        val selectionSpinnerYear = yearSelected - 2022
         val listSpinnerMonth = listOf(*resources.getStringArray(R.array.months))
         val listSpinnerYear = listOf(*resources.getStringArray(R.array.years))
         

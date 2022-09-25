@@ -9,5 +9,6 @@ data class Sale(
  val id: String,
  var date: Date,
  var customer: String,
- var products: MutableList<Product>
+ var products: MutableList<Product>,
+ var isAnulled: Boolean = false
  )

@@ -92,6 +92,11 @@
     <string name="text_profit_total">Ganancia total</string>
     <string name="text_generate_new_sale">Generando nueva Venta</string>
     <string name="text_resale">Reventa</string>
+    <string name="text_sale_anulled">Venta anulada</string>
+    <string name="text_anull">Anular</string>
+    <string name="msg_dialog_anull">¿Desea anular la Venta seleccionada?\nEsta acción no se puede deshacer.</string>
+    <string name="text_anull_already">Venta ya fue anulada</string>
+
 
     <!--Stats-->
     <string name="title_stats">Estadísticas</string>
