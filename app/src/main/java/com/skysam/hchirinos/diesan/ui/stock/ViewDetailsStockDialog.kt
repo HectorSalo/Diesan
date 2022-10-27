@@ -16,7 +16,7 @@ import com.skysam.hchirinos.diesan.databinding.DialogViewDetailLotBinding
 /**
  * Created by Hector Chirinos on 15/02/2022.
  */
-class ViewDetailsStockDialog: DialogFragment() {
+class ViewDetailsStockDialog: DialogFragment(), ItemStockOnClick {
     private var _binding: DialogViewDetailLotBinding? = null
     private val binding get() = _binding!!
     private val viewModel: StockViewModel by activityViewModels()
@@ -48,7 +48,7 @@ class ViewDetailsStockDialog: DialogFragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        adapterItems = ItemDetailsStockAdapter(products)
+        adapterItems = ItemDetailsStockAdapter(products, this)
         binding.rvProducts.apply {
             setHasFixedSize(true)
             adapter = adapterItems
@@ -83,5 +83,9 @@ class ViewDetailsStockDialog: DialogFragment() {
                 )
             }
         }
+    }
+    
+    override fun viewItem(product: Product) {
+    
     }
 }

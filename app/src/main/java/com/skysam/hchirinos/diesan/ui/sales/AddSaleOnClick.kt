@@ -8,5 +8,6 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 interface AddSaleOnClick {
  fun check(product: Product, isCheck: Boolean)
  fun delete(product: Product)
- fun edit(product: Product)
+ fun editQuantity(product: Product)
+ fun editPrice(product: Product)
 }

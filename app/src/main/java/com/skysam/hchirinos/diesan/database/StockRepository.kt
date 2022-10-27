@@ -40,7 +40,7 @@ object StockRepository {
  fun getLotsFromStock(): Flow<MutableList<Lot>> {
   return callbackFlow {
    val request = getInstance()
-    .orderBy(Constants.DATE, Query.Direction.DESCENDING)
+    .orderBy(Constants.DATE, Query.Direction.ASCENDING)
     .addSnapshotListener { value, error ->
      if (error != null) {
       Log.w(ContentValues.TAG, "Listen failed.", error)
@@ -134,8 +134,8 @@ object StockRepository {
         )
         var add = true
         for (produc in products) {
-         if (prod.name == produc.name && prod.priceToSell == produc.priceToSell
-          && prod.amountProfit == produc.amountProfit) {
+         if (prod.name == produc.name && prod.priceByUnit == produc.priceByUnit
+          && prod.percentageProfit == produc.percentageProfit) {
           produc.quantity = produc.quantity + prod.quantity
           add = false
          }

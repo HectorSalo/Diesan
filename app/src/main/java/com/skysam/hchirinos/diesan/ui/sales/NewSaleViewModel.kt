@@ -27,6 +27,9 @@ class NewSaleViewModel: ViewModel() {
 	}
 	val total: LiveData<Double> = _total
 	
+	private val _productToChangePrice = MutableLiveData<Product>()
+	val productToChangePrice: LiveData<Product> = _productToChangePrice
+	
 	fun addProducToSell(product: Product) {
 		if (!_productsToSell.value!!.contains(product)) {
 			_productsToSell.value!!.add(product)
@@ -54,6 +57,10 @@ class NewSaleViewModel: ViewModel() {
 			}
 		}
 		_productsToSell.value = _productsToSell.value
+	}
+	
+	fun productToChangePrice(product: Product) {
+		_productToChangePrice.value = product
 	}
 	
 	private fun addTotal(value: Double) {

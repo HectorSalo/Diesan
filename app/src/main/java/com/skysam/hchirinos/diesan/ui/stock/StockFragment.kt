@@ -16,7 +16,7 @@ import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
 import com.skysam.hchirinos.diesan.ui.sales.AddSaleActivity
 
 
-class StockFragment : Fragment() {
+class StockFragment : Fragment(), ItemStockOnClick {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
     private val viewModel: StockViewModel by activityViewModels()
@@ -40,7 +40,7 @@ class StockFragment : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        adapterItems = ItemDetailsStockAdapter(products)
+        adapterItems = ItemDetailsStockAdapter(products, this)
         binding.rvStock.apply {
             setHasFixedSize(true)
             adapter = adapterItems
@@ -128,5 +128,11 @@ class StockFragment : Fragment() {
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, selection.toString())
         startActivity(Intent.createChooser(intent, getString(R.string.title_share_dialog)))
+    }
+    
+    override fun viewItem(product: Product) {
+        viewModel.viewProduct(product)
+        val editStockDialog = EditStockDialog()
+        editStockDialog.show(requireActivity().supportFragmentManager, tag)
     }
 }

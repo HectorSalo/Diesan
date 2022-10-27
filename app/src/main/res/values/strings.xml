@@ -58,6 +58,8 @@
     <string name="text_quantity_sell">Cantidad vendida</string>
     <string name="text_quantity_remain">Cantidad restante</string>
     <string name="title_share_dialog">Compartir con</string>
+    <string name="title_edit_stock_dialog">Editar inventario</string>
+    <string name="error_exists_stock">Cantidad mayor a existencia</string>
 
     <!--Lots-->
     <string name="text_new_lot">Nuevo Lote</string>
@@ -77,7 +79,7 @@
     <string name="text_total_dolar">Total ($) %1$s</string>
     <string name="text_save_lot">Guardar Lote</string>
     <string name="text_sum_total">Suma total</string>
-    <string name="text_price_by_unit_tota">Precio unitario total</string>
+    <string name="text_price_by_unit_total">Precio unitario total</string>
     <string name="text_amount_to_sell">Monto de venta</string>
     <string name="text_profit_by_unit">Ganancia unitaria</string>
     <string name="error_number_exists">Número usado</string>
@@ -96,6 +98,7 @@
     <string name="text_anull">Anular</string>
     <string name="msg_dialog_anull">¿Desea anular la Venta seleccionada?\nEsta acción no se puede deshacer.</string>
     <string name="text_anull_already">Venta ya fue anulada</string>
+    <string name="title_edit_price_dialog">Editar precio Producto</string>
 
 
     <!--Stats-->

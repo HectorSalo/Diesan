@@ -148,7 +148,6 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                 if (it.isNotEmpty()) {
                     lots.clear()
                     lots.addAll(it)
-                    lots.sortBy { lot -> lot.date }
                 }
             }
         }
@@ -199,7 +198,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
         viewModel.removeProducToSell(product)
     }
 
-    override fun edit(product: Product) {
+    override fun editQuantity(product: Product) {
         var quantityAvailable = 1
         val arrayQuantities = mutableListOf<String>()
         for (pro in products) {
@@ -238,7 +237,14 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
         dialog.setCancelable(true)
         dialog.show()
     }
-
+    
+    override fun editPrice(product: Product) {
+        positionToEdit = productsToSell.indexOf(product)
+        viewModel.productToChangePrice(product)
+        val editPriceDialog = EditPriceDialog()
+        editPriceDialog.show(requireActivity().supportFragmentManager, tag)
+    }
+    
     private fun validateData() {
         if (productsToSell.isEmpty()) {
             Snackbar.make(binding.root, getString(R.string.error_list_empty), Snackbar.LENGTH_LONG).show()

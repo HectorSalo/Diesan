@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
@@ -13,7 +14,7 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 /**
  * Created by Hector Chirinos on 15/02/2022.
  */
-class ItemDetailsStockAdapter(private val products: MutableList<Product>):
+class ItemDetailsStockAdapter(private val products: MutableList<Product>, private val onClick: ItemStockOnClick):
  RecyclerView.Adapter<ItemDetailsStockAdapter.ViewHolder>() {
  lateinit var context: Context
 
@@ -37,6 +38,8 @@ class ItemDetailsStockAdapter(private val products: MutableList<Product>):
    R.string.text_item_price,
    Class.convertDoubleToString(item.amountProfit))
   holder.quantityRemain.text = item.quantity.toString()
+  
+  holder.constraint.setOnClickListener { onClick.viewItem(item) }
  }
 
  override fun getItemCount(): Int = products.size
@@ -46,5 +49,6 @@ class ItemDetailsStockAdapter(private val products: MutableList<Product>):
   val quantityRemain: TextView = view.findViewById(R.id.tv_quantity_remain)
   val amount: TextView = view.findViewById(R.id.tv_amount)
   val profit: TextView = view.findViewById(R.id.tv_profit)
+  val constraint: ConstraintLayout = view.findViewById(R.id.constraint)
  }
 }

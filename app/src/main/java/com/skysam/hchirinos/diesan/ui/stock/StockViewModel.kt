@@ -18,7 +18,19 @@ class StockViewModel: ViewModel() {
  private val _lotToView = MutableLiveData<Lot>()
  val lotToView: LiveData<Lot> get() = _lotToView
  
+ private val _productToChangeStock = MutableLiveData<Product>()
+ val productToChangeStock: LiveData<Product> = _productToChangeStock
+ 
  fun viewLot(lot: Lot) {
   _lotToView.value = lot
+ }
+ 
+ fun viewProduct(product: Product) {
+  _productToChangeStock.value = product
+ }
+ 
+ fun updateStock(lot: Lot) {
+  if (lot.products.isEmpty()) StockRepository.deleteStock(lot)
+  else StockRepository.updateStock(lot)
  }
 }

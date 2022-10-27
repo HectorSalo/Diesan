@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/text_price_by_unit_tota" />
+            android:text="@string/text_price_by_unit_total" />
 
         <TextView
             android:id="@+id/tv_price"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="end"
-            android:text="@string/text_price_by_unit_tota" />
+            android:text="@string/text_price_by_unit_total" />
     </LinearLayout>
 
     <LinearLayout

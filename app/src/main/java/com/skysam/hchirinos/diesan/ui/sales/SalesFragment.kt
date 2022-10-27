@@ -164,7 +164,7 @@ class SalesFragment : Fragment(), SalesOnClick {
     }
     
     private fun updateStock(sale: Sale) {
-        val lot = lots.last()
+        val lot = lots.first()
         for (prodSale in sale.products) {
             var add = true
             for (prodLot in lot.products) {

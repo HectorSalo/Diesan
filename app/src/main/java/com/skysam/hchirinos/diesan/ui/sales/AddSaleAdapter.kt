@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Product
-import com.skysam.hchirinos.diesan.ui.lots.ItemsNewLotAdapter
 
 /**
  * Created by Hector Chirinos on 16/02/2022.
@@ -42,7 +41,11 @@ class AddSaleAdapter(private val products: MutableList<Product>, private val onC
             Class.convertDoubleToString(item.priceToSell), Class.convertIntToString(item.quantity))
         holder.checkBox.isChecked = item.isCheck
 
-        holder.constraint.setOnClickListener { onClick.edit(item) }
+        holder.constraint.setOnClickListener { onClick.editQuantity(item) }
+        holder.constraint.setOnLongClickListener {
+            onClick.editPrice(item)
+            true
+        }
         holder.buttonDelete.setOnClickListener {
             onClick.delete(item)
         }
