@@ -1,9 +1,8 @@
 package com.skysam.hchirinos.diesan.ui.sales
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.skysam.hchirinos.diesan.databinding.ActivityAddSaleBinding
-import com.skysam.hchirinos.diesan.databinding.ActivityStockBinding
 
 class AddSaleActivity : AppCompatActivity() {
 	private lateinit var binding: ActivityAddSaleBinding

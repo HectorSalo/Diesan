@@ -7,5 +7,6 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
  */
 
 interface ItemStockOnClick {
-	fun viewItem(product: Product)
+	fun onClick(product: Product)
+	fun longClick(product: Product)
 }

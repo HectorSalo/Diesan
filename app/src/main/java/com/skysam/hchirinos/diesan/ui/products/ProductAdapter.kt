@@ -83,6 +83,6 @@ class ProductAdapter(private var products: MutableList<Product>, private val onC
 
     fun updateList(newList: MutableList<Product>) {
         products = newList
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, products.size)
     }
 }

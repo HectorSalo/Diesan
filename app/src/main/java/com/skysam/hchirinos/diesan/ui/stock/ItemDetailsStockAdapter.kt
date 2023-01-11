@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Product
@@ -14,9 +14,10 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 /**
  * Created by Hector Chirinos on 15/02/2022.
  */
-class ItemDetailsStockAdapter(private val products: MutableList<Product>, private val onClick: ItemStockOnClick):
+class ItemDetailsStockAdapter(private var products: MutableList<Product>, private val onClick: ItemStockOnClick):
  RecyclerView.Adapter<ItemDetailsStockAdapter.ViewHolder>() {
- lateinit var context: Context
+ private lateinit var context: Context
+ private val listShare = mutableListOf<Product>()
 
  override fun onCreateViewHolder(
   parent: ViewGroup,
@@ -39,7 +40,22 @@ class ItemDetailsStockAdapter(private val products: MutableList<Product>, privat
    Class.convertDoubleToString(item.amountProfit))
   holder.quantityRemain.text = item.quantity.toString()
   
-  holder.constraint.setOnClickListener { onClick.viewItem(item) }
+  holder.card.isChecked = listShare.contains(item)
+  
+  holder.card.setOnClickListener {
+   onClick.onClick(item)
+   if (listShare.isNotEmpty()) {
+    holder.card.isChecked = !holder.card.isChecked
+    if (listShare.contains(item)) listShare.remove(item) else listShare.add(item)
+   }
+  }
+  
+  holder.card.setOnLongClickListener {
+   onClick.longClick(item)
+   holder.card.isChecked = !holder.card.isChecked
+   if (listShare.contains(item)) listShare.remove(item) else listShare.add(item)
+   true
+  }
  }
 
  override fun getItemCount(): Int = products.size
@@ -49,6 +65,12 @@ class ItemDetailsStockAdapter(private val products: MutableList<Product>, privat
   val quantityRemain: TextView = view.findViewById(R.id.tv_quantity_remain)
   val amount: TextView = view.findViewById(R.id.tv_amount)
   val profit: TextView = view.findViewById(R.id.tv_profit)
-  val constraint: ConstraintLayout = view.findViewById(R.id.constraint)
+  val card: MaterialCardView = view.findViewById(R.id.constraint)
+ }
+ 
+ fun updateList(newList: MutableList<Product>) {
+  products = newList
+  listShare.clear()
+  notifyItemRangeChanged(0, products.size)
  }
 }

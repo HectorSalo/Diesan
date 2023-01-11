@@ -1,12 +1,16 @@
 package com.skysam.hchirinos.diesan.ui.stock
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
@@ -16,19 +20,21 @@ import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
 import com.skysam.hchirinos.diesan.ui.sales.AddSaleActivity
 
 
-class StockFragment : Fragment(), ItemStockOnClick {
+class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
     private var _binding: FragmentStockBinding? = null
     private val binding get() = _binding!!
     private val viewModel: StockViewModel by activityViewModels()
+    private var actionMode: ActionMode? = null
     private lateinit var adapterItems: ItemDetailsStockAdapter
     private val products = mutableListOf<Product>()
+    private val productsToShare = mutableListOf<Product>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStockBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
+        requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -58,33 +64,7 @@ class StockFragment : Fragment(), ItemStockOnClick {
         (requireActivity() as AppCompatActivity).supportActionBar?.show()
     }
     
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.stock, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) =
-        when (item.itemId) {
-            android.R.id.home -> {
-                getOut()
-                true
-            }
-            R.id.action_list_stock -> {
-                findNavController().navigate(R.id.action_FragmentStock_to_listLotsFragment)
-                true
-            }
-            R.id.action_share -> {
-                share()
-                true
-            }
-            R.id.action_add_sale -> {
-                startActivity(Intent(requireContext(), AddSaleActivity::class.java))
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-
+    @SuppressLint("NotifyDataSetChanged")
     private fun loadViewModel() {
         viewModel.productsFromLots.observe(viewLifecycleOwner) {
             if (_binding != null) {
@@ -107,32 +87,113 @@ class StockFragment : Fragment(), ItemStockOnClick {
         requireActivity().finish()
     }
 
-    private fun share() {
+    private fun share(list: MutableList<Product>, allShare: Boolean) {
         val emojiPin = String(Character.toChars(0x1F4CC))
         val emojiHeart = String(Character.toChars(0x2764))
         val selection = StringBuilder()
-        selection.append("Buenas, productos disponibles: ")
-        for (item in products) {
-            selection.append("\n\n").append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}")
+        if (allShare) {
+            selection.append("Buenas, productos disponibles: ").append("\n\n")
         }
-        selection.append("\n\n")
-            .append("Hacemos las entregas personales con *previo acuerdo* en la plaza Madariaga del Paraíso y en la Clínica Popular del Paraíso (lunes a sábado)\n" +
-                    "\n" +
-                    "También contamos con servicio de delivery, *tiene un costo adicional dependiendo de la zona*\n" +
-                    "\n" +
-                    "Si tu pedido llega a \$70 el delivery sale gratuito.\n" +
-                    "\n" +
-                    "Síguenos en Instagram @distribuidoradiesan")
-            .append(emojiHeart)
+        for (item in list) {
+            selection.append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}").append("\n\n")
+        }
+        if (allShare) {
+            selection.append("\n\n")
+                .append("Hacemos las entregas personales con *previo acuerdo* en la plaza Madariaga del Paraíso y en la Clínica Popular del Paraíso (lunes a sábado)\n" +
+                        "\n" +
+                        "También contamos con servicio de delivery, *tiene un costo adicional dependiendo de la zona*\n" +
+                        "\n" +
+                        "Si tu pedido llega a \$70 el delivery sale gratuito.\n" +
+                        "\n" +
+                        "Síguenos en Instagram @distribuidoradiesan")
+                .append(emojiHeart)
+        }
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, selection.toString())
         startActivity(Intent.createChooser(intent, getString(R.string.title_share_dialog)))
     }
     
-    override fun viewItem(product: Product) {
-        viewModel.viewProduct(product)
-        val editStockDialog = EditStockDialog()
-        editStockDialog.show(requireActivity().supportFragmentManager, tag)
+    override fun onClick(product: Product) {
+        if (productsToShare.isEmpty()) {
+            viewModel.viewProduct(product)
+            val editStockDialog = EditStockDialog()
+            editStockDialog.show(requireActivity().supportFragmentManager, tag)
+            return
+        }
+        
+        if (productsToShare.contains(product)) {
+            productsToShare.remove(product)
+            if (productsToShare.isEmpty()) (activity as AppCompatActivity)
+                .startSupportActionMode(callback)!!.finish()
+        } else {
+            productsToShare.add(product)
+        }
+        actionMode?.title = "Seleccionado ${productsToShare.size}"
+    }
+    
+    override fun longClick(product: Product) {
+        if (productsToShare.isEmpty()) {
+            actionMode = (activity as AppCompatActivity).startSupportActionMode(callback)
+        }
+        if (productsToShare.contains(product)) {
+            productsToShare.remove(product)
+            if (productsToShare.isEmpty()) (activity as AppCompatActivity)
+                .startSupportActionMode(callback)!!.finish()
+        } else {
+            productsToShare.add(product)
+        }
+        actionMode?.title = "Seleccionado ${productsToShare.size}"
+    }
+    
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.stock, menu)
+    }
+    
+    override fun onMenuItemSelected(menuItem: MenuItem) = when (menuItem.itemId) {
+        android.R.id.home -> {
+            getOut()
+            true
+        }
+        R.id.action_list_stock -> {
+            findNavController().navigate(R.id.action_FragmentStock_to_listLotsFragment)
+            true
+        }
+        R.id.action_share -> {
+            share(products, true)
+            true
+        }
+        R.id.action_add_sale -> {
+            startActivity(Intent(requireContext(), AddSaleActivity::class.java))
+            true
+        }
+        else -> false
+    }
+    
+    private val callback = object : ActionMode.Callback {
+        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            requireActivity().menuInflater.inflate(R.menu.contextual_action_bar, menu)
+            return true
+        }
+    
+        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+            return false
+        }
+    
+        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+            return when (item?.itemId) {
+                R.id.action_share -> {
+                    share(productsToShare, false)
+                    true
+                }
+                else -> false
+            }
+        }
+    
+        override fun onDestroyActionMode(mode: ActionMode?) {
+            productsToShare.clear()
+            adapterItems.updateList(products)
+        }
+    
     }
 }

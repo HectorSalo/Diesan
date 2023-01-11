@@ -85,7 +85,11 @@ class ViewDetailsStockDialog: DialogFragment(), ItemStockOnClick {
         }
     }
     
-    override fun viewItem(product: Product) {
+    override fun onClick(product: Product) {
+    
+    }
+    
+    override fun longClick(product: Product) {
     
     }
 }
