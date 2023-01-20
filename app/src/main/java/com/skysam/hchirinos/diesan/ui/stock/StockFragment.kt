@@ -95,7 +95,8 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
             selection.append("Buenas, productos disponibles: ").append("\n\n")
         }
         for (item in list) {
-            selection.append("$emojiPin ${item.name}. Precio: $${Class.convertDoubleToString(item.priceToSell)}").append("\n\n")
+            if (!selection.contains(item.name)) selection.append("$emojiPin ${item.name}." +
+                    " Precio: $${Class.convertDoubleToString(item.priceToSell)}").append("\n\n")
         }
         if (allShare) {
             selection.append("\n\n")
