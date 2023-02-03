@@ -99,6 +99,8 @@
     <string name="msg_dialog_anull">¿Desea anular la Venta seleccionada?\nEsta acción no se puede deshacer.</string>
     <string name="text_anull_already">Venta ya fue anulada</string>
     <string name="title_edit_price_dialog">Editar precio Producto</string>
+    <string name="text_delivery">Delivery</string>
+    <string name="text_total_delivery">Total ($) %1$s + Delivery ($) %2$s</string>
 
 
     <!--Stats-->

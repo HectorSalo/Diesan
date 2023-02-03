@@ -31,7 +31,8 @@ object SaleRespository {
   val data = hashMapOf(
    Constants.DATE to sale.date,
    Constants.CUSTOMER to sale.customer,
-   Constants.PRODUCTS to sale.products
+   Constants.PRODUCTS to sale.products,
+   Constants.DELIVERY to sale.delivery
   )
   getInstance().add(data)
  }
@@ -50,6 +51,7 @@ object SaleRespository {
      for (sale in value!!) {
       val products = mutableListOf<Product>()
       var anulled = false
+      var delivery = 0.0
       if (sale.get(Constants.PRODUCTS) != null) {
        @Suppress("UNCHECKED_CAST")
        val list = sale.data.getValue(Constants.PRODUCTS) as MutableList<HashMap<String, Any>>
@@ -72,12 +74,14 @@ object SaleRespository {
        }
       }
       if (sale.getBoolean(Constants.IS_ANULLED) != null) anulled = sale.getBoolean(Constants.IS_ANULLED)!!
+      if (sale.getDouble(Constants.DELIVERY) != null) delivery = sale.getDouble(Constants.DELIVERY)!!
       val saleNew = Sale(
        sale.id,
        sale.getDate(Constants.DATE)!!,
        sale.getString(Constants.CUSTOMER)!!,
        products,
-       anulled
+       anulled,
+       delivery
       )
       sales.add(saleNew)
      }

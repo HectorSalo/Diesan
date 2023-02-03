@@ -33,6 +33,7 @@ object Constants {
     const val DATE = "date"
     const val NUMBER_LOT = "numberLot"
     const val IS_ANULLED = "isAnulled"
+    const val DELIVERY = "delivery"
 
     const val CUSTOMER = "customer"
     

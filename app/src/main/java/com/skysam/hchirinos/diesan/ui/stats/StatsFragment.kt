@@ -145,6 +145,7 @@ class StatsFragment : Fragment() {
     private fun loadData() {
         var totalSales = 0.0
         var totalProfit = 0.0
+        var totalDelivery = 0.0
         
         for (sale in sales) {
             if (isByRange) {
@@ -153,6 +154,7 @@ class StatsFragment : Fragment() {
                         totalSales += pro.quantity * pro.priceToSell
                         totalProfit += pro.quantity * pro.amountProfit
                     }
+                    totalDelivery += sale.delivery
                 }
             } else {
                 val calendar = Calendar.getInstance()
@@ -162,6 +164,7 @@ class StatsFragment : Fragment() {
                         totalSales += pro.quantity * pro.priceToSell
                         totalProfit += pro.quantity * pro.amountProfit
                     }
+                    totalDelivery += sale.delivery
                 }
             }
         }
@@ -170,6 +173,7 @@ class StatsFragment : Fragment() {
             Class.convertDoubleToString(totalSales))
         binding.tvProfit.text = getString(R.string.text_amount_add_graph,
             Class.convertDoubleToString(totalProfit))
+        binding.tvDelivery.text = Class.convertDoubleToString(totalDelivery)
         binding.progressBar.visibility = View.GONE
     }
     

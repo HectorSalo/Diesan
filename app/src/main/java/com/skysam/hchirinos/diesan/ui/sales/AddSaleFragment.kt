@@ -1,6 +1,8 @@
 package com.skysam.hchirinos.diesan.ui.sales
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +31,7 @@ import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
 
-class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
+class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick, TextWatcher {
     private var _binding: FragmentAddSaleBinding? = null
     private val binding get() = _binding!!
     private val viewModel: NewSaleViewModel by activityViewModels()
@@ -57,6 +59,8 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        
+        binding.etDelivery.addTextChangedListener(this)
 
         dateSelected = Date().time
         binding.etDate.setText(DateFormat.getDateInstance().format(Date()))
@@ -88,6 +92,11 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
                 }
             }
             viewModel.addProducToSell(productSelected!!)
+        }
+        
+        binding.swDelivery.setOnCheckedChangeListener { _, isOn ->
+            if (isOn) binding.tfDelivery.visibility = View.VISIBLE
+            else binding.tfDelivery.visibility = View.GONE
         }
 
         binding.etDate.setOnClickListener { selecDate() }
@@ -246,17 +255,30 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
     }
     
     private fun validateData() {
+        binding.tfDelivery.error = null
         if (productsToSell.isEmpty()) {
             Snackbar.make(binding.root, getString(R.string.error_list_empty), Snackbar.LENGTH_LONG).show()
             binding.etProduct.requestFocus()
             return
         }
         val customer = binding.etCustomer.text.toString().ifEmpty { "" }
+        var delivery = 0.0
+        var deliveryS = binding.etDelivery.text.toString()
+        if (binding.swDelivery.isChecked) {
+            if (deliveryS == "0,00") {
+                binding.tfDelivery.error = getString(R.string.error_price_zero)
+                binding.etDelivery.requestFocus()
+                return
+            }
+            deliveryS = deliveryS.replace(".", "").replace(",", ".")
+            delivery = deliveryS.toDouble()
+        }
         val sale = Sale(
             Constants.ID,
             Date(dateSelected),
             customer,
-            productsToSell
+            productsToSell,
+            delivery = delivery
         )
         viewModel.saveSale(sale)
     
@@ -315,5 +337,29 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick {
             binding.etDate.setText(DateFormat.getDateInstance().format(dateSelected))
         }
         picker.show(requireActivity().supportFragmentManager, picker.toString())
+    }
+    
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    
+    }
+    
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    
+    }
+    
+    override fun afterTextChanged(s: Editable?) {
+        var cadena = s.toString()
+        cadena = cadena.replace(",", "").replace(".", "")
+        if (cadena.isNotEmpty()) {
+            val cantidad: Double = cadena.toDouble() / 100
+            cadena = String.format(Locale.GERMANY, "%,.2f", cantidad)
+    
+            if (s.toString() == binding.etDelivery.text.toString()) {
+                binding.etDelivery.removeTextChangedListener(this)
+                binding.etDelivery.setText(cadena)
+                binding.etDelivery.setSelection(cadena.length)
+                binding.etDelivery.addTextChangedListener(this)
+            }
+        }
     }
 }

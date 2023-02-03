@@ -33,7 +33,8 @@ class SalesAdapter(private val sales: MutableList<Sale>, private val onClick: Sa
   for (pro in item.products) {
    total += (pro.quantity * pro.priceToSell)
   }
-  holder.total.text = context.getString(R.string.text_total_dolar, Class.convertDoubleToString(total))
+  holder.total.text = if (item.delivery == 0.0) context.getString(R.string.text_total_dolar, Class.convertDoubleToString(total))
+  else context.getString(R.string.text_total_delivery, Class.convertDoubleToString(total), Class.convertDoubleToString(item.delivery))
   holder.date.text = context.getString(R.string.text_date_sale_item, Class.convertDateToString(item.date))
   if (!item.isAnulled) {
    holder.card.setCardBackgroundColor(getPrimaryColor())
