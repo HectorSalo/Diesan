@@ -104,7 +104,7 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
                         "\n" +
                         "También contamos con servicio de delivery, *tiene un costo adicional dependiendo de la zona*\n" +
                         "\n" +
-                        "Si tu pedido llega a \$70 el delivery sale gratuito.\n" +
+                        "Si tu pedido llega a \$50 el delivery sale gratuito.\n" +
                         "\n" +
                         "Síguenos en Instagram @distribuidoradiesan")
                 .append(emojiHeart)
