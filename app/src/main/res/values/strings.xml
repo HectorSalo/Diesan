@@ -60,6 +60,8 @@
     <string name="title_share_dialog">Compartir con</string>
     <string name="title_edit_stock_dialog">Editar inventario</string>
     <string name="error_exists_stock">Cantidad mayor a existencia</string>
+    <string name="text_update_stock">Actualizar inventario</string>
+    <string name="text_update_price">Actualizar precio</string>
 
     <!--Lots-->
     <string name="text_new_lot">Nuevo Lote</string>

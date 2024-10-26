@@ -21,12 +21,19 @@ class StockViewModel: ViewModel() {
  private val _productToChangeStock = MutableLiveData<Product>()
  val productToChangeStock: LiveData<Product> = _productToChangeStock
  
+ private val _productToChangePrice = MutableLiveData<Product>()
+ val productToChangePrice: LiveData<Product> = _productToChangePrice
+ 
  fun viewLot(lot: Lot) {
   _lotToView.value = lot
  }
  
  fun viewProduct(product: Product) {
   _productToChangeStock.value = product
+ }
+ 
+ fun productToChangePrice(product: Product) {
+  _productToChangePrice.value = product
  }
  
  fun updateStock(lot: Lot) {

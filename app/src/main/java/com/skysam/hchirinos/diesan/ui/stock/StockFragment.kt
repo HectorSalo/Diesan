@@ -12,12 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.button.MaterialButton
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.FragmentStockBinding
 import com.skysam.hchirinos.diesan.ui.sales.AddSaleActivity
+import com.skysam.hchirinos.diesan.ui.sales.EditPriceDialog
 
 
 class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
@@ -117,9 +120,7 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
     
     override fun onClick(product: Product) {
         if (productsToShare.isEmpty()) {
-            viewModel.viewProduct(product)
-            val editStockDialog = EditStockDialog()
-            editStockDialog.show(requireActivity().supportFragmentManager, tag)
+            optionsBottomSheet(product)
             return
         }
         
@@ -195,6 +196,31 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
             productsToShare.clear()
             adapterItems.updateList(products)
         }
+    }
     
+    private fun optionsBottomSheet(product: Product) {
+        val bottomSheet = BottomSheetDialog(requireContext())
+        val viewSheet = layoutInflater.inflate(R.layout.layout_options_stock_bottom_sheet, null)
+        bottomSheet.setContentView(viewSheet)
+        bottomSheet.dismissWithAnimation = true
+        bottomSheet.show()
+        
+        
+        val btnStock: MaterialButton = viewSheet!!.findViewById(R.id.btn_update_stock)
+        val btnPrice: MaterialButton = viewSheet.findViewById(R.id.btn_update_price)
+        
+        btnStock.setOnClickListener {
+            bottomSheet.dismiss()
+            viewModel.viewProduct(product)
+            val editStockDialog = EditStockDialog()
+            editStockDialog.show(requireActivity().supportFragmentManager, tag)
+        }
+        
+        btnPrice.setOnClickListener {
+            bottomSheet.dismiss()
+            viewModel.productToChangePrice(product)
+            val editPriceDialog = EditPriceStockDialog()
+            editPriceDialog.show(requireActivity().supportFragmentManager, tag)
+        }
     }
 }

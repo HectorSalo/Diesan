@@ -69,7 +69,8 @@
         android:src="@drawable/ic_add_24"
         android:tintMode="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/coordinator"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/salmon_base_normal"/>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator"

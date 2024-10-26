@@ -8,7 +8,10 @@
     android:id="@+id/constraint"
     android:clickable="true"
     android:focusable="true"
-    android:checkable="true">
+    android:checkable="true"
+    app:cardElevation="8dp"
+    android:outlineAmbientShadowColor="@color/transparent"
+    android:outlineSpotShadowColor="@color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

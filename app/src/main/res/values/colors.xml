@@ -15,4 +15,8 @@
     <color name="red_light">#EF9A9A</color>
 
     <color name="color_about">#2C2B2B</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="color_backgroud_item_drawer">#1FBBDEFB</color>
 </resources>
