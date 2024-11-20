@@ -99,7 +99,7 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
         }
         for (item in list) {
             if (!selection.contains(item.name)) selection.append("$emojiPin ${item.name}." +
-                    " Precio: $${Class.convertDoubleToString(item.priceToSell)}").append("\n\n")
+                    " Precio: €${Class.convertDoubleToString(item.priceToSell)}").append("\n\n")
         }
         if (allShare) {
             selection.append("\n\n")
@@ -107,7 +107,7 @@ class StockFragment : Fragment(), ItemStockOnClick, MenuProvider {
                         "\n" +
                         "También contamos con servicio de delivery, *tiene un costo adicional dependiendo de la zona*\n" +
                         "\n" +
-                        "Si tu pedido llega a \$50 el delivery sale gratuito.\n" +
+                        "Si tu pedido llega a €50 el delivery sale gratuito.\n" +
                         "\n" +
                         "Síguenos en Instagram @distribuidoradiesan")
                 .append(emojiHeart)
