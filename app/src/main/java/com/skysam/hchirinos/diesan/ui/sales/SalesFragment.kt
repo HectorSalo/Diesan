@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.ProductIdentity
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
 import com.skysam.hchirinos.diesan.databinding.FragmentSalesBinding
@@ -168,8 +169,7 @@ class SalesFragment : Fragment(), SalesOnClick {
         for (prodSale in sale.products) {
             var add = true
             for (prodLot in lot.products) {
-                if (prodSale.name == prodLot.name && prodSale.priceByUnit == prodLot.priceByUnit
-                    && prodSale.percentageProfit == prodLot.percentageProfit) {
+                if (ProductIdentity.areSameStockPartition(prodSale, prodLot)) {
                     lot.products[lot.products.indexOf(prodLot)].quantity = prodLot.quantity + prodSale.quantity
                     add = false
                     break

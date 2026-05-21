@@ -18,6 +18,7 @@ object Constants {
     const val SALE_DEMO = "saleDemo"
 
     const val ID = "id"
+    const val PRODUCT_KEY = "productKey"
     const val NAME = "name"
     const val PRICE = "price"
     const val QUANTITY = "quantity"

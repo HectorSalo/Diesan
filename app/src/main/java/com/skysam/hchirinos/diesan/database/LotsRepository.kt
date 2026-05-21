@@ -37,6 +37,21 @@ object LotsRepository {
         getInstance().add(data)
     }
 
+    fun updateLotProducts(lotId: String, products: MutableList<Product>) {
+        getInstance().document(lotId)
+            .update(Constants.PRODUCTS, products)
+            .addOnSuccessListener {
+                Log.d(
+                    "DIESAN_LOT_RENAME",
+                    "Updated products field. lotId=$lotId, collection=$PATH_LOTS. " +
+                            "Did NOT touch stock, sale or products."
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.w("DIESAN_LOT_RENAME", "Failed to update products on lotId=$lotId", e)
+            }
+    }
+
     fun getLots(): Flow<MutableList<Lot>> {
         return callbackFlow {
             val request = getInstance()
@@ -68,6 +83,7 @@ object LotsRepository {
                                     item[Constants.AMOUNT_PROFIT].toString().toDouble(),
                                     item[Constants.IMAGE].toString()
                                 )
+                                prod.productKey = item[Constants.PRODUCT_KEY]?.toString()
                                 products.add(prod)
                             }
                         }

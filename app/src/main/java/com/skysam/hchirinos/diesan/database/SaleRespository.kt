@@ -70,6 +70,7 @@ object SaleRespository {
          item[Constants.AMOUNT_PROFIT].toString().toDouble(),
          item[Constants.IMAGE].toString()
         )
+        prod.productKey = item[Constants.PRODUCT_KEY]?.toString()
         products.add(prod)
        }
       }

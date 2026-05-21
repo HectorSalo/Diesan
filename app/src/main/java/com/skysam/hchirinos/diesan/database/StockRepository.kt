@@ -7,6 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
+import com.skysam.hchirinos.diesan.common.ProductIdentity
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import kotlinx.coroutines.channels.awaitClose
@@ -68,6 +69,7 @@ object StockRepository {
          item[Constants.AMOUNT_PROFIT].toString().toDouble(),
          item[Constants.IMAGE].toString()
         )
+        prod.productKey = item[Constants.PRODUCT_KEY]?.toString()
         products.add(prod)
        }
       }
@@ -132,10 +134,10 @@ object StockRepository {
          item[Constants.AMOUNT_PROFIT].toString().toDouble(),
          item[Constants.IMAGE].toString()
         )
+        prod.productKey = item[Constants.PRODUCT_KEY]?.toString()
         var add = true
         for (produc in products) {
-         if (prod.name == produc.name && prod.priceByUnit == produc.priceByUnit
-          && prod.percentageProfit == produc.percentageProfit) {
+         if (ProductIdentity.areSameStockPartition(prod, produc)) {
           produc.quantity = produc.quantity + prod.quantity
           add = false
          }

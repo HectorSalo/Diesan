@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.Constants
+import com.skysam.hchirinos.diesan.common.ProductIdentity
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.common.dataClass.Sale
@@ -88,7 +89,9 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick, TextWatcher {
                         pro.percentageProfit,
                         pro.priceToSell,
                         pro.amountProfit,
-                        pro.image)
+                        pro.image,
+                        productKey = pro.productKey
+                    )
                 }
             }
             viewModel.addProducToSell(productSelected!!)
@@ -196,7 +199,8 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick, TextWatcher {
             newPriceToSell,
             product.amountProfit,
             product.image,
-            isCheck
+            isCheck,
+            productKey = product.productKey
         )
         positionToEdit = productsToSell.indexOf(product)
         viewModel.editProductToSell(productEdited)
@@ -235,7 +239,8 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick, TextWatcher {
                     product.priceToSell,
                     product.amountProfit,
                     product.image,
-                    product.isCheck
+                    product.isCheck,
+                    productKey = product.productKey
                 )
                 positionToEdit = productsToSell.indexOf(product)
                 viewModel.editProductToSell(productEdited)
@@ -291,8 +296,7 @@ class AddSaleFragment: Fragment(), OnClickExit, AddSaleOnClick, TextWatcher {
             productsByLot.addAll(lot.products)
             for (pr in productsByLot) {
                 for (pro in quantitiesProducts) {
-                    if (pro.name == pr.name && pro.priceByUnit == pr.priceByUnit
-                        && pro.percentageProfit == pr.percentageProfit) {
+                    if (ProductIdentity.areSameStockPartition(pro, pr)) {
                         val quanityFinal = pr.quantity - pro.quantity
                         if (quanityFinal == 0) {
                             lot.products.remove(pr)

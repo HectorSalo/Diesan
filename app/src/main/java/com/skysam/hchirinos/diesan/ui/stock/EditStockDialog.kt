@@ -9,6 +9,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.diesan.R
+import com.skysam.hchirinos.diesan.common.ProductIdentity
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogUpdateStockBinding
@@ -71,8 +72,7 @@ class EditStockDialog: DialogFragment() {
 			val productsByLot = mutableListOf<Product>()
 			productsByLot.addAll(lot.products)
 			for (pr in productsByLot) {
-				if (product.name == pr.name && product.priceByUnit == pr.priceByUnit
-					&& product.percentageProfit == pr.percentageProfit) {
+				if (ProductIdentity.areSameStockPartition(product, pr)) {
 					val quanityFinal = pr.quantity - quantityToRemove
 					if (quanityFinal == 0) {
 						lot.products.remove(pr)

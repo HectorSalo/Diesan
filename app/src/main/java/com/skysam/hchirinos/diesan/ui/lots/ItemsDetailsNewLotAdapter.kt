@@ -13,7 +13,10 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 /**
  * Created by Hector Chirinos on 08/01/2022.
  */
-class ItemsDetailsNewLotAdapter(private var products: MutableList<Product>):
+class ItemsDetailsNewLotAdapter(
+    private var products: MutableList<Product>,
+    private val onRenameRequested: ((position: Int, product: Product) -> Unit)? = null
+):
     RecyclerView.Adapter<ItemsDetailsNewLotAdapter.ViewHolder>() {
     lateinit var context: Context
 
@@ -40,6 +43,16 @@ class ItemsDetailsNewLotAdapter(private var products: MutableList<Product>):
             Class.convertDoubleToString(item.amountProfit))
         holder.profitTotal.text = context.getString(R.string.text_item_price,
             Class.convertDoubleToString(item.amountProfit * item.quantity))
+
+        if (onRenameRequested != null) {
+            holder.name.setOnLongClickListener {
+                val pos = holder.bindingAdapterPosition
+                if (pos != RecyclerView.NO_POSITION) {
+                    onRenameRequested.invoke(pos, products[pos])
+                }
+                true
+            }
+        }
     }
 
     override fun getItemCount(): Int = products.size

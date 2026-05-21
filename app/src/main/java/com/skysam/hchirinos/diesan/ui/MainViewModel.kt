@@ -1,6 +1,7 @@
 package com.skysam.hchirinos.diesan.ui
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -65,5 +66,15 @@ class MainViewModel : ViewModel() {
     
     fun updateStock(lot: Lot) {
         StockRepository.updateStock(lot)
+    }
+
+    fun renameProductInLot(lot: Lot, index: Int, oldName: String, newName: String) {
+        Log.d(
+            "DIESAN_LOT_RENAME",
+            "Renaming product in lot. lotId=${lot.id}, index=$index, " +
+                    "oldName=\"$oldName\", newName=\"$newName\", collection=lots/lotsDemo. " +
+                    "This flow does NOT touch stock, sale, or products."
+        )
+        LotsRepository.updateLotProducts(lot.id, lot.products)
     }
 }

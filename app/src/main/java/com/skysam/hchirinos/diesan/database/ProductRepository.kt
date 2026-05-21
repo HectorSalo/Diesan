@@ -75,7 +75,7 @@ object ProductRepository {
     }
 
     fun saveProduct(product: Product) {
-        val data = hashMapOf(
+        val data = hashMapOf<String, Any>(
             Constants.NAME to product.name.replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(
                     Locale.getDefault()
@@ -92,6 +92,7 @@ object ProductRepository {
             Constants.AMOUNT_PROFIT to product.amountProfit,
             Constants.IMAGE to product.image
         )
+        product.productKey?.let { data[Constants.PRODUCT_KEY] = it }
         getInstanceFirestore().add(data)
     }
 
@@ -121,6 +122,7 @@ object ProductRepository {
                             product.getDouble(Constants.AMOUNT_PROFIT)!!,
                             product.getString(Constants.IMAGE)!!
                         )
+                        productNew.productKey = product.getString(Constants.PRODUCT_KEY)
                         products.add(productNew)
                     }
                     trySend(Class.organizedAlphabeticList(products))
@@ -130,7 +132,7 @@ object ProductRepository {
     }
 
     fun updateProduct(product: Product) {
-        val data: Map<String, Any> = hashMapOf(
+        val data = hashMapOf<String, Any>(
             Constants.NAME to product.name.replaceFirstChar {
                 if (it.isLowerCase()) it.titlecase(
                     Locale.getDefault()
@@ -147,9 +149,10 @@ object ProductRepository {
             Constants.AMOUNT_PROFIT to product.amountProfit,
             Constants.IMAGE to product.image
         )
+        product.productKey?.let { data[Constants.PRODUCT_KEY] = it }
         getInstanceFirestore()
             .document(product.id)
-            .update(data)
+            .update(data.toMap())
     }
 
     fun deleteProducts(products: MutableList<Product>) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -253,6 +254,14 @@ class AddNewLotFirstFragment : Fragment(), OnClickInterface, OnClickExit, TextWa
         productToSend.priceToSell = Class.rounded((productToSend.priceByUnit * productToSend.percentageProfit) +
                 productToSend.priceByUnit)
         productToSend.amountProfit = Class.roundedTwoDecimals(productToSend.priceToSell - productToSend.priceByUnit)
+        if (productToSend.productKey.isNullOrBlank()) {
+            val generatedKey = UUID.randomUUID().toString()
+            Log.d(
+                "DIESAN_PRODUCT_KEY",
+                "AddNewLotFirstFragment: generated productKey=$generatedKey for product in new lot, name=\"${productToSend.name}\""
+            )
+            productToSend.productKey = generatedKey
+        }
         viewModel.addProduct(productToSend)
         viewModel.addTotal((price.toDouble() + ship.toDouble() + tax.toDouble()) * quantityInt)
     }

@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.skysam.hchirinos.diesan.R
 import com.skysam.hchirinos.diesan.common.Class
+import com.skysam.hchirinos.diesan.common.ProductIdentity
 import com.skysam.hchirinos.diesan.common.dataClass.Lot
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogEditPriceSaleBinding
@@ -120,8 +121,7 @@ class EditPriceStockDialog: DialogFragment(), TextWatcher {
 		
 		lots.forEach {
 			it.products.forEach { pr ->
-				if (product.name == pr.name && product.priceByUnit == pr.priceByUnit
-					&& product.percentageProfit == pr.percentageProfit) {
+				if (ProductIdentity.areSameStockPartition(product, pr)) {
 					pr.priceToSell = newPrice
 					pr.amountProfit = newPrice - product.priceByUnit
 					pr.percentageProfit = ((pr.priceToSell - pr.priceByUnit) * 100) / pr.priceByUnit

@@ -73,7 +73,8 @@ class EditPriceDialog: DialogFragment(), TextWatcher {
 			newPrice,
 			amountProfit,
 			product.image,
-			product.isCheck
+			product.isCheck,
+			productKey = product.productKey
 		)
 		viewModel.editProductToSell(productEdited)
 		dismiss()

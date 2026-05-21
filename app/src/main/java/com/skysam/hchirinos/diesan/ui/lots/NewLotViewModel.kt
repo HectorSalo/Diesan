@@ -1,5 +1,6 @@
 package com.skysam.hchirinos.diesan.ui.lots
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.database.LotsRepository
 import com.skysam.hchirinos.diesan.database.ProductRepository
 import com.skysam.hchirinos.diesan.database.StockRepository
+import java.util.UUID
 
 class NewLotViewModel : ViewModel() {
     val productsOlder: LiveData<MutableList<Product>> = ProductRepository.getProducts().asLiveData()
@@ -42,6 +44,14 @@ class NewLotViewModel : ViewModel() {
 
     fun sendNewLot(lot: Lot, productsOlder: MutableList<Product>) {
         for (pro in lot.products) {
+            if (pro.productKey.isNullOrBlank()) {
+                val generatedKey = UUID.randomUUID().toString()
+                Log.d(
+                    "DIESAN_PRODUCT_KEY",
+                    "sendNewLot: repaired missing productKey for product name=\"${pro.name}\", id=${pro.id}, generated=$generatedKey"
+                )
+                pro.productKey = generatedKey
+            }
             var exists = false
             for (prod in productsOlder) {
                 if (pro.id == prod.id) exists = true

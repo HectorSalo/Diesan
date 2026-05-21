@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(\"C:\\\\Users\\\\Hector PC\\\\StudioProjects\\\\Diesan\\\\gradlew.bat\" :app:compileDebugKotlin --console=plain)",
+      "Bash(export JAVA_HOME=\"/c/Program Files/Android/Android Studio/jbr\")",
+      "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
+      "Bash('/c/Program Files/Android/Android Studio/jbr/bin/java.exe' -version)",
+      "Bash(./gradlew.bat :app:compileDebugKotlin --console=plain)"
+    ]
+  }
+}

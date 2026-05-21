@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -24,6 +25,7 @@ import com.skysam.hchirinos.diesan.common.Class
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogAddProductBinding
 import com.skysam.hchirinos.diesan.ui.MainViewModel
+import java.util.UUID
 
 /**
  * Created by Hector Chirinos on 12/02/2022.
@@ -151,6 +153,14 @@ class EditProductDialog: DialogFragment() {
         if (name != product.name || image != product.image) {
             product.name = name
             product.image = image!!
+            if (product.productKey.isNullOrBlank()) {
+                val generatedKey = UUID.randomUUID().toString()
+                Log.d(
+                    "DIESAN_PRODUCT_KEY",
+                    "EditProductDialog: filled missing productKey=$generatedKey for catalog id=${product.id}, name=\"$name\""
+                )
+                product.productKey = generatedKey
+            }
             viewModel.updateProduct(product)
         }
         dismiss()

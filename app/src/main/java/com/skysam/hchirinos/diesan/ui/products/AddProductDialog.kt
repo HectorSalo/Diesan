@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -24,6 +25,7 @@ import com.skysam.hchirinos.diesan.common.Constants
 import com.skysam.hchirinos.diesan.common.dataClass.Product
 import com.skysam.hchirinos.diesan.databinding.DialogAddProductBinding
 import com.skysam.hchirinos.diesan.ui.MainViewModel
+import java.util.UUID
 
 /**
  * Created by Hector Chirinos (Home) on 28/12/2021.
@@ -134,10 +136,16 @@ class AddProductDialog: DialogFragment() {
     }
 
     private fun saveProduct() {
+        val generatedKey = UUID.randomUUID().toString()
+        Log.d(
+            "DIESAN_PRODUCT_KEY",
+            "AddProductDialog: generated productKey=$generatedKey for new catalog product name=\"$name\""
+        )
         val product = Product(
             Constants.ID,
             name,
-            image = image!!
+            image = image!!,
+            productKey = generatedKey
         )
         viewModel.saveProduct(product)
         dismiss()
