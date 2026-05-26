@@ -5,7 +5,11 @@
       "Bash(export JAVA_HOME=\"/c/Program Files/Android/Android Studio/jbr\")",
       "Bash(export PATH=\"$JAVA_HOME/bin:$PATH\")",
       "Bash('/c/Program Files/Android/Android Studio/jbr/bin/java.exe' -version)",
-      "Bash(./gradlew.bat :app:compileDebugKotlin --console=plain)"
+      "Bash(./gradlew.bat :app:compileDebugKotlin --console=plain)",
+      "Bash(./gradlew.bat :app:compileDebugKotlin --no-daemon -q)",
+      "PowerShell($env:JAVA_HOME = 'C:\\\\Program Files\\\\Android\\\\Android Studio\\\\jbr'; .\\\\gradlew.bat :app:compileDebugKotlin --no-daemon -q 2>&1 | Select-Object -Last 80)",
+      "PowerShell($env:JAVA_HOME = 'C:\\\\Program Files\\\\Android\\\\Android Studio\\\\jbr'; .\\\\gradlew.bat :app:compileDebugKotlin --no-daemon 2>&1 | Select-Object -Last 30; \"EXIT_CODE=$LASTEXITCODE\")",
+      "PowerShell($env:JAVA_HOME = 'C:\\\\Program Files\\\\Android\\\\Android Studio\\\\jbr'; .\\\\gradlew.bat :app:compileDebugKotlin --no-daemon --rerun-tasks 2>&1 | Select-Object -Last 60; \"EXIT_CODE=$LASTEXITCODE\")"
     ]
   }
 }

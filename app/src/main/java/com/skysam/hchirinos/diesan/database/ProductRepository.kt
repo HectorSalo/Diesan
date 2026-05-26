@@ -161,4 +161,63 @@ object ProductRepository {
                 .delete()
         }
     }
+
+    /**
+     * Renombra los productos del catálogo (products/productsDemo) cuyo
+     * productKey coincida con el indicado. Solo modifica el campo name;
+     * precios, imagen, cantidad y demás campos quedan intactos. No actualiza
+     * por name; si productKey está vacío, no hace nada.
+     */
+    fun renameProductInCatalogByProductKey(productKey: String, newName: String) {
+        if (productKey.isBlank()) {
+            Log.w(
+                "DIESAN_LOT_RENAME",
+                "renameProductInCatalogByProductKey aborted: productKey is blank. No update performed."
+            )
+            return
+        }
+        getInstanceFirestore()
+            .whereEqualTo(Constants.PRODUCT_KEY, productKey)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                if (snapshot.isEmpty) {
+                    Log.d(
+                        "DIESAN_LOT_RENAME",
+                        "Catalog rename: no docs match productKey=$productKey in $PATH_PRODUCTS. Nothing to update."
+                    )
+                    return@addOnSuccessListener
+                }
+                for (doc in snapshot) {
+                    getInstanceFirestore().document(doc.id)
+                        .update(Constants.NAME, newName)
+                        .addOnSuccessListener {
+                            Log.d(
+                                "DIESAN_LOT_RENAME",
+                                "Catalog doc updated by productKey. docId=${doc.id}, " +
+                                        "productKey=$productKey, newName=\"$newName\", " +
+                                        "collection=$PATH_PRODUCTS. Match was by productKey, not by name."
+                            )
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(
+                                "DIESAN_LOT_RENAME",
+                                "Failed to update catalog doc=${doc.id} for productKey=$productKey",
+                                e
+                            )
+                        }
+                }
+                Log.d(
+                    "DIESAN_LOT_RENAME",
+                    "Catalog rename complete. productKey=$productKey, docsUpdated=${snapshot.size()}, " +
+                            "collection=$PATH_PRODUCTS."
+                )
+            }
+            .addOnFailureListener { e ->
+                Log.w(
+                    "DIESAN_LOT_RENAME",
+                    "Failed to query catalog for rename. productKey=$productKey",
+                    e
+                )
+            }
+    }
 }

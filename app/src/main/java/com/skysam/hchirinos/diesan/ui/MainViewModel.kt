@@ -77,4 +77,30 @@ class MainViewModel : ViewModel() {
         )
         LotsRepository.updateLotProducts(lot.id, lot.products)
     }
+
+    fun renameProductInLotStockAndCatalog(
+        lot: Lot,
+        index: Int,
+        oldName: String,
+        newName: String
+    ) {
+        val productKey = lot.products[index].productKey
+        Log.d(
+            "DIESAN_LOT_RENAME",
+            "Renaming product in lot + stock + catalog. lotId=${lot.id}, index=$index, " +
+                    "oldName=\"$oldName\", newName=\"$newName\", productKey=$productKey. " +
+                    "This flow does NOT touch sale/saleDemo nor statistics."
+        )
+        LotsRepository.updateLotProducts(lot.id, lot.products)
+        if (!productKey.isNullOrBlank()) {
+            StockRepository.renameProductInStockByProductKey(productKey, newName)
+            ProductRepository.renameProductInCatalogByProductKey(productKey, newName)
+        } else {
+            Log.w(
+                "DIESAN_LOT_RENAME",
+                "Skipped stock/catalog rename because productKey is blank. " +
+                        "lotId=${lot.id}, index=$index. Only the lot was updated; rename was NOT applied by name."
+            )
+        }
+    }
 }

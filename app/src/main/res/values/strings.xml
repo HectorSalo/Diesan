@@ -89,6 +89,7 @@
     <string name="hint_rename_product_lot">Nombre del producto</string>
     <string name="msg_rename_product_lot">Solo cambia el nombre dentro de este lote histórico. No afecta inventario ni ventas.</string>
     <string name="msg_rename_product_lot_no_key">Este producto no tiene identificador estable. Corregir el nombre puede separarlo del inventario actual. Solo se modificará este lote histórico.</string>
+    <string name="checkbox_rename_sync_stock_catalog">Actualizar también inventario y catálogo</string>
 
     <!--Sales-->
     <string name="text_new_sale">Nueva Venta</string>

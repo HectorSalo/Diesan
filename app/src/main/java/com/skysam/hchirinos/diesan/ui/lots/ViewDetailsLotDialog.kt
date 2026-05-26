@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
@@ -66,22 +68,39 @@ class ViewDetailsLotDialog: DialogFragment() {
     private fun showRenameDialog(position: Int, product: Product) {
         if (!::lot.isInitialized) return
 
+        val hasProductKey = !product.productKey.isNullOrBlank()
+
         val editText = EditText(requireContext()).apply {
             setText(product.name)
             setSelection(text.length)
             hint = getString(R.string.hint_rename_product_lot)
         }
 
-        val messageRes = if (product.productKey.isNullOrBlank()) {
-            R.string.msg_rename_product_lot_no_key
-        } else {
+        val syncCheckBox = if (hasProductKey) {
+            CheckBox(requireContext()).apply {
+                text = getString(R.string.checkbox_rename_sync_stock_catalog)
+                isChecked = true
+            }
+        } else null
+
+        val pad = (16 * resources.displayMetrics.density).toInt()
+        val container = LinearLayout(requireContext()).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(pad, pad / 2, pad, pad / 2)
+            addView(editText)
+            syncCheckBox?.let { addView(it) }
+        }
+
+        val messageRes = if (hasProductKey) {
             R.string.msg_rename_product_lot
+        } else {
+            R.string.msg_rename_product_lot_no_key
         }
 
         AlertDialog.Builder(requireActivity())
             .setTitle(R.string.title_rename_product_lot_dialog)
             .setMessage(messageRes)
-            .setView(editText)
+            .setView(container)
             .setPositiveButton(R.string.text_save) { _, _ ->
                 val newName = editText.text.toString().trim()
                 if (newName.isEmpty()) {
@@ -93,7 +112,11 @@ class ViewDetailsLotDialog: DialogFragment() {
 
                 lot.products[position].name = newName
                 adapterItems.notifyItemChanged(position)
-                viewModel.renameProductInLot(lot, position, oldName, newName)
+                if (hasProductKey && syncCheckBox?.isChecked == true) {
+                    viewModel.renameProductInLotStockAndCatalog(lot, position, oldName, newName)
+                } else {
+                    viewModel.renameProductInLot(lot, position, oldName, newName)
+                }
             }
             .setNegativeButton(R.string.text_cancel, null)
             .show()

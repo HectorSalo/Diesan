@@ -98,6 +98,71 @@ object StockRepository {
   getInstance().document(lot.id)
    .update(data)
  }
+
+ /**
+  * Renombra los productos embebidos dentro de stock/stockDemo que tengan
+  * el productKey indicado. Solo modifica el campo name; el resto de campos
+  * (quantity, priceByUnit, percentageProfit, priceToSell, amountProfit,
+  * image, etc.) queda intacto. No actualiza por name; si productKey está
+  * vacío, no hace nada.
+  */
+ fun renameProductInStockByProductKey(productKey: String, newName: String) {
+  if (productKey.isBlank()) {
+   Log.w(
+    "DIESAN_LOT_RENAME",
+    "renameProductInStockByProductKey aborted: productKey is blank. No update performed."
+   )
+   return
+  }
+  getInstance().get()
+   .addOnSuccessListener { snapshot ->
+    var docsUpdated = 0
+    for (doc in snapshot) {
+     if (doc.get(Constants.PRODUCTS) == null) continue
+     @Suppress("UNCHECKED_CAST")
+     val list = doc.data.getValue(Constants.PRODUCTS) as MutableList<HashMap<String, Any>>
+     var changed = false
+     for (item in list) {
+      val key = item[Constants.PRODUCT_KEY]?.toString()
+      if (!key.isNullOrBlank() && key == productKey) {
+       item[Constants.NAME] = newName
+       changed = true
+      }
+     }
+     if (changed) {
+      docsUpdated++
+      getInstance().document(doc.id)
+       .update(Constants.PRODUCTS, list)
+       .addOnSuccessListener {
+        Log.d(
+         "DIESAN_LOT_RENAME",
+         "Stock doc updated by productKey. docId=${doc.id}, productKey=$productKey, " +
+                 "newName=\"$newName\", collection=$PATH_STOCK. Match was by productKey, not by name."
+        )
+       }
+       .addOnFailureListener { e ->
+        Log.w(
+         "DIESAN_LOT_RENAME",
+         "Failed to update stock doc=${doc.id} for productKey=$productKey",
+         e
+        )
+       }
+     }
+    }
+    Log.d(
+     "DIESAN_LOT_RENAME",
+     "Stock rename complete. productKey=$productKey, docsUpdated=$docsUpdated, " +
+             "collection=$PATH_STOCK. sale/saleDemo was NOT touched."
+    )
+   }
+   .addOnFailureListener { e ->
+    Log.w(
+     "DIESAN_LOT_RENAME",
+     "Failed to query stock for rename. productKey=$productKey",
+     e
+    )
+   }
+ }
  
  fun deleteStock(lot: Lot) {
   getInstance().document(lot.id)
